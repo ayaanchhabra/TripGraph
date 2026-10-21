@@ -1,0 +1,8 @@
+.env
+*.dump
+*.sql.gz
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store

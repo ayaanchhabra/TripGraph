@@ -1,7 +1,5 @@
 # TripGraph
 
-# TripGraph
-
 A database-centered student trip and services planner for the area around NSUT, Dwarka, Delhi.
 
 A 4-person DBMS course project at NSUT, built on PostgreSQL.

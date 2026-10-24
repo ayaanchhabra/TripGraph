@@ -1,130 +1,295 @@
-# TripGraph
+# AI-Driven Multi-Vendor Network Security Compliance Auditor
 
-A database-centered student trip and services planner for the area around NSUT, Dwarka, Delhi.
+![Home Page](assets/screenshots/home.png)
 
-A 4-person DBMS course project at NSUT, built on PostgreSQL.
+## 1. Project Information
 
-## 1. What is TripGraph?
+- **Project Title:** AI-Driven Multi-Vendor Network Security Compliance Auditor
+- **PS ID:** 26155
+- **PS Title:** AI-Driven Multi-Vendor Network Security Compliance Auditor
+- **Category:** Software
+- **Theme:** Blockchain & Cybersecurity
+- **Team Name:** Segmentation Fault
 
-NSUT students need food, stationery, essentials and hangouts outside campus, and need to know how to reach them (walk, e-rickshaw, auto, metro) and what it costs. General map apps do not handle student constraints such as vegetarian only, under Rs 100, open late, student discount, or total fare under Rs 50.
-
-TripGraph stores this knowledge in a structured PostgreSQL database:
-
-- A small hand-built map of the area as nodes and edges
-- A directory of places with categories, tags, opening hours and reviews
-- Rules inside the database (constraints, triggers, views) that keep the data valid
-
-The database does the thinking: routing, filtering, ranking and validation all happen in SQL. The user interface is intentionally minimal.
-
-## 2. Scope
-
-**In scope**
-
-- About 15 hand-entered map nodes and 30 edges
-- Places across 21 categories, with tags, opening hours and reviews
-- Cheapest-route queries with total fare and time (recursive CTE)
-- Triggers, views, constraints, roles (student and admin)
-- Normalization to BCNF, indexing benchmarks, concurrency demo
-
-**Not in scope**
-
-- No OpenStreetMap import
-- No PostGIS or pgRouting
-- No map UI
-- No row-level security
-- No NoSQL implementation (report paragraph only)
-- No Docker
-- No submission or approval flow
-- No place versioning
-
-## 3. Tech Stack
-
-| Purpose | Tool |
+| Resource | Link |
 |---|---|
-| Database | PostgreSQL 15+ |
-| Procedural code | PL/pgSQL |
-| DB tools | psql, pgAdmin |
-| Backend | Python (Flask, psycopg2) |
-| Diagrams | draw.io, dbdiagram.io |
-| Version control | Git / GitHub |
+| GitHub Repository | [kanishkwaliid-prog/SIH-2026](https://github.com/kanishkwaliid-prog/SIH-2026) |
+| Demo Video | [Watch on YouTube](https://www.youtube.com/watch?v=amNHwsLx78g) |
+| Presentation (PPT) | [Google Drive](https://drive.google.com/drive/folders/1oOA9zceZgk9ZKvUtSgLsa_jGkEyHQTX8?usp=sharing) |
+| Architecture Document | [Google Drive](https://drive.google.com/drive/folders/1SJUBmso8XW0OwtMuxsepUmIMRxHzHp3Q?usp=sharing) |
 
-## 4. Team and Roles
+## 2. Problem Statement
 
-| Member | Role |
-|---|---|
-| A (leader) | Map, data, search and performance |
-| K | Schema, trip logic and rules |
-| S | User features, access control and interface |
-| AJ | ER diagram, data entry and documentation |
+Modern enterprise networks run hardware from dozens of vendors, each with
+its own proprietary CLI syntax. Organizations must align these devices
+with security frameworks like CIS, NIST SP 800-53, and DISA STIGs, but
+today this is either done manually (slow, error-prone) or with
+expensive, vendor-locked tools that can't adapt to new or unfamiliar
+device types. As networks adopt new/white-box hardware, traditional
+hardcoded parsers fail outright, since they can't interpret
+configuration structures they were never built to recognize.
 
-Details:
+## 3. Proposed Solution
 
-- **A:** mini map (nodes and edges), bulk data generation, indexes and EXPLAIN ANALYZE benchmarks, full-text search, relational algebra queries
-- **K:** DDL and constraints, recursive CTE trip queries, triggers, views, lost-update demo
-- **S:** roles and GRANT/REVOKE, sample users and reviews, favorites, normalization write-up, Flask app
-- **AJ:** ER diagram, relational schema diagram, sample CSVs, README, test records, report, PPT, viva Q&A sheet
+An AI-augmented, vendor-agnostic compliance engine. Configuration files
+are normalized into a standard, vendor-neutral schema regardless of
+source vendor. Ten vendors are supported directly: Cisco, Juniper, and
+Palo Alto are fully parsed; Fortinet, Arista, Huawei, MikroTik, Check
+Point, Netgate pfSense, and SONiC are experimentally supported. For any
+other vendor, or any line a parser doesn't recognize, a locally-trained
+classifier makes a first-pass guess, and only when it's unsure does the
+system escalate to an LLM (with sensitive values redacted first). Any
+classification below full confidence goes through a staged human-review
+process before it is trusted, and every promotion is recorded in a
+tamper-evident audit log. The resolved configuration is checked against
+one or more security frameworks and compiled into a report with
+severity-rated findings and vendor-specific CLI remediation. Access is
+organization-scoped, with 2FA and role-based permissions.
 
-## 5. Repository Structure
+## 4. Key Features
+
+- **Vendor-agnostic ingestion** — auto-detects vendor from config
+  structure (with human override); bulk upload across 10
+  directly-supported vendors
+- **Local ML pre-classifier** — classifies unrecognized lines on-device
+  before any cloud LLM call is made
+- **AI-assisted learning loop** — LLM suggestions are verified through
+  weighted human consensus before being trusted
+- **Privacy-conscious LLM use** — IPs, passwords, and community strings
+  are redacted before any config text leaves the machine
+- **Multi-framework compliance** — CIS, NIST, STIG, RBI, SEBI, and
+  ISO 27001, with a picker to choose which to evaluate against
+- **Multi-format reporting** — Simple and Technical views with
+  vendor-specific remediation, exportable as PDF, JSON, CSV, or Markdown
+- **Secure multi-tenant accounts** — TOTP-based 2FA with backup codes
+  and role-based access, scoped per organization
+- **Tamper-evident audit trails** — hash-chained logs for training
+  decisions and user activity, verifiable via `GET /audit`
+
+## 5. Technology Stack
+
+- **Backend:** Python, FastAPI
+- **AI/LLM:** Groq API (`openai/gpt-oss-120b`)
+- **Storage:** SQLite
+- **Auth:** PyJWT, argon2-cffi, PyOTP + qrcode
+- **Local classifier:** scikit-learn + joblib
+- **Rule packs:** PyYAML
+- **Report generation:** Jinja2 + WeasyPrint (PDF)
+- **Frontend:** HTML, CSS, vanilla JavaScript
+
+## 6. Architecture
+
+Full breakdown: [Architecture Document](https://drive.google.com/drive/folders/1SJUBmso8XW0OwtMuxsepUmIMRxHzHp3Q?usp=sharing)
+
+![Architecture Diagram](assets/screenshots/architecture.png)
 
 ```
-tripgraph/
-  README.md                 (AJ)
-  schema/                   (K)   tables, constraints, reference data
-  data/
-    map/                    (A)   nodes.csv, edges.csv, loading scripts
-    csv/                    (AJ)  places, tags, opening hours
-    sample_data/            (S)   users, reviews, favorites
-  queries/
-    trips/                  (K)
-    views/                  (K, S)
-    relational_algebra/     (A)
-  triggers/                 (K)
-  indexing/                 (A)   benchmarks/
-  transactions/             (K)   lost update demo and fix
-  recovery/                 (A)   optional crash recovery demo
-  security/                 (S)   roles and grants
-  app/                      (S)   backend/, frontend/
-  normalization/            (S)   messy table to BCNF
-  tests/                    (K, AJ) tests (K), recorded results (AJ)
-  docs/                     (AJ)  er_diagram/, report/, presentation/
+User uploads config(s)
+        |
+        v
+Sign-in (email + password, optional TOTP 2FA)
+        |
+        v
+Frontend (upload -> vendor confirm -> unknown-line review -> report)
+        |
+        v
+Backend API (FastAPI)
+        |
+        v
+Vendor detection + parsers
+        |
+        v
+Local ML classifier --> LLM fallback (redacted) --> human review
+        |
+        v
+Normalized JSON config
+        |
+        v
+Compliance engine (CIS / NIST / STIG / RBI / SEBI / ISO 27001)
+        |
+        v
+Report (PDF / JSON / CSV / Markdown)
 ```
 
-## 6. Setup
+## 7. Repository Structure
 
-> TODO (after K confirms the final file names): add the exact commands.
+```
+SIH-2026/
+├── README.md
+├── requirements.txt
+├── .env.example
+├── assets/
+│   └── screenshots/
+├── dev-notes/                    Build log and design notes
+├── submission/                   Presentation and demo notes
+└── src/
+    ├── frontend/                   Static HTML/CSS/JS, calls the backend API directly
+    │   ├── shared.js                 API calls, session handling, routing
+    │   ├── auth/                     Sign-in / organization signup
+    │   ├── account/security/         2FA setup and backup codes
+    │   ├── admin/                    Team management, activity log viewer
+    │   ├── upload_configuration/
+    │   ├── analyzing_configuration/
+    │   ├── vendor_detection_result/
+    │   ├── review_unknown_lines/
+    │   ├── compliance_report_dashboard/
+    │   ├── rulesets/
+    │   └── legal/                    Privacy, Terms, Help
+    │
+    └── backend/
+        ├── api.py                    FastAPI app, wires everything into HTTP endpoints
+        ├── pipeline.py               Detection -> parsing -> classifier -> LLM fallback
+        ├── activity_log.py           Hash-chained user activity log
+        ├── main.py                   Standalone CLI test script
+        │
+        ├── auth/                     Accounts, 2FA, role-based access
+        │   ├── routes.py               Signup/login, 2FA enrollment
+        │   ├── admin_routes.py         Team and role management
+        │   ├── deps.py                 Permission checks on endpoints
+        │   ├── store.py                Account / organization storage
+        │   ├── security.py             Password hashing
+        │   ├── lockout.py              Login lockout
+        │   ├── totp.py                 TOTP logic
+        │   └── config.py               JWT secret loading
+        │
+        ├── converter/                Vendor detection + parsers
+        │   ├── detection.py            Vendor signature detection
+        │   ├── block2a_main.py         Entry point
+        │   └── parsers/                One parser per vendor (10 vendors)
+        │
+        ├── block2b/                  Local classifier, LLM fallback, memory, review
+        │   ├── prefilter.py            Local classifier (tried before any cloud call)
+        │   ├── rules_prefilter.py      Rule-based pre-filter
+        │   ├── train_prefilter.py      Classifier training script
+        │   ├── llm_classifier.py       Groq-based classification
+        │   ├── redaction.py            Sensitive-value redaction
+        │   ├── memory.py               Confirmed-line cache
+        │   └── review_system.py        Staged human review + audit log
+        │
+        ├── compliance_engine/        Compliance evaluation
+        │   ├── evaluator.py            Rule evaluation logic
+        │   ├── audit_log.py            Scan audit log
+        │   └── rules/                  CIS, NIST, STIG, RBI, SEBI, ISO 27001 (YAML)
+        │
+        ├── report_generator/
+        │   └── report_gen.py         PDF / JSON / CSV / Markdown reports
+        └── shared/
+            └── schema.py             Common vendor-neutral schema
+```
 
-Prerequisites: PostgreSQL 15 or later, psql, Python 3.10+ (for the app only).
+## 8. Final Presentation
 
-Planned run order:
+[View the presentation (Google Drive)](https://drive.google.com/drive/folders/1oOA9zceZgk9ZKvUtSgLsa_jGkEyHQTX8?usp=sharing)
 
-1. Create the database
-2. Run the files in `schema/` in numeric order
-3. Load the map from `data/map/`
-4. Load the CSVs from `data/csv/` and sample data from `data/sample_data/`
-5. Create triggers, then views
-6. Run security scripts
-7. Optionally run the app
+## 9. Demo Video
 
-## 7. Running the Demos
+[Watch the demo on YouTube](https://www.youtube.com/watch?v=amNHwsLx78g)
 
-> TODO (fill in as each teammate finishes their part)
+## 10. Screenshots / Prototype Photos
 
-| Demo | Folder | Owner |
-|---|---|---|
-| Cheapest route query | `queries/trips/` | K |
-| Indexing benchmark | `indexing/` | A |
-| Lost update and fix | `transactions/` | K |
-| Roles (student vs admin) | `security/` | S |
-| Normalization | `normalization/` | S |
-## 8. Git Workflow
+**Upload Configuration**
 
-- `main` must always work
-- One branch per person: `a/`, `k/`, `s/`, `aj/`
-- Small commits with a prefix, for example `k: add trip_leg trigger`
-- Pull from `main` daily
-- Merge through a pull request reviewed by one other member
-- Never commit `.env` files or large data dumps
+![Upload Configuration](assets/screenshots/home.png)
 
-## 9. Documentation
+**Compliance Report Dashboard** (click to watch the demo)
 
-Diagrams, the report, the presentation and the viva Q&A sheet are in `docs/`.
+[![Demo Video](assets/screenshots/demo-thumbnail.png)](https://www.youtube.com/watch?v=amNHwsLx78g)
+
+## 11. Installation
+
+```bash
+git clone https://github.com/kanishkwaliid-prog/SIH-2026.git
+cd SIH-2026
+```
+
+**macOS / Linux**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env          # then fill in GROQ_API_KEY, JWT_SECRET, DEMO_PASSWORD
+```
+
+**Windows (PowerShell)**
+
+```powershell
+python -m venv venv
+venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+copy .env.example .env        # then fill in GROQ_API_KEY, JWT_SECRET, DEMO_PASSWORD
+```
+
+> If PowerShell blocks activation, run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` once, or use Command Prompt (`venv\Scripts\activate.bat`).
+
+Generate a `JWT_SECRET` (use `python3` on macOS/Linux). The backend refuses to start without one:
+
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(48))"
+```
+
+**PDF generation (WeasyPrint)** needs system libraries:
+
+```bash
+brew install pango cairo gdk-pixbuf libffi     # macOS
+```
+
+On Windows, install the [GTK3 runtime](https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#windows) and restart the terminal. JSON/CSV/Markdown export works without it.
+
+## 12. Run
+
+Two terminals, run at the same time.
+
+**macOS / Linux**
+
+```bash
+# Terminal 1 -- backend
+source venv/bin/activate
+cd src/backend
+uvicorn api:app --reload --port 8000
+```
+
+```bash
+# Terminal 2 -- frontend
+cd src/frontend
+python3 -m http.server 5500
+```
+
+**Windows (PowerShell)**
+
+```powershell
+# Terminal 1 -- backend
+venv\Scripts\Activate.ps1
+cd src\backend
+uvicorn api:app --reload --port 8000
+```
+
+```powershell
+# Terminal 2 -- frontend
+cd src\frontend
+python -m http.server 5500
+```
+
+Open `http://localhost:5500/upload_configuration/` in your browser. You'll be
+sent to the sign-in page first.
+
+**Demo accounts** (created at startup when `DEMO_PASSWORD` is set, all using that password): `admin@`, `senior@`, `engineer@` and `viewer@` at `alpha.demo` and `beta.demo` -- e.g. `engineer@alpha.demo`. Or create a new organization from the sign-in page.
+
+**Tests:** `cd src/backend` then `pytest auth/ -q`
+
+## 13. Future Scope
+
+- **Live device polling** — pull configs directly from devices over SSH
+  instead of relying on uploaded files
+- **Local/on-prem LLM option** — for organizations that can't send any
+  config data to a third-party API, even redacted
+- **Broader parser coverage** — deeper support for the 7 experimental
+  vendors
+- **Tighter CORS and a relative API base** — currently permissive/
+  hardcoded for local development
+
+## Important
+
+Do not commit `.env`, API keys, or any other credentials. `.env` is
+already excluded via `.gitignore`; if a key is ever accidentally
+committed, revoke and rotate it immediately.

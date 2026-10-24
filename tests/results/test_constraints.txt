@@ -1,0 +1,65 @@
+BEGIN
+CREATE TABLE
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+INSERT 0 4
+INSERT 0 5
+INSERT 0 1
+INSERT 0 1
+INSERT 0 7
+INSERT 0 7
+INSERT 0 1
+INSERT 0 1
+INSERT 0 3
+INSERT 0 1
+ #  |      area      |                         test                          | status 
+----+----------------+-------------------------------------------------------+--------
+  1 | Reviews        | valid review is accepted                              | PASS
+  2 | Reviews        | second review by same user for same place is rejected | PASS
+  3 | Reviews        | rating 0 is rejected                                  | PASS
+  4 | Reviews        | rating 6 is rejected                                  | PASS
+  5 | Reviews        | review for a place that does not exist is rejected    | PASS
+  6 | Reviews        | review by a user that does not exist is rejected      | PASS
+  7 | Places         | price_level 0 is rejected                             | PASS
+  8 | Places         | price_level 4 is rejected                             | PASS
+  9 | Places         | place with a category that does not exist is rejected | PASS
+ 10 | Places         | place with a map node that does not exist is rejected | PASS
+ 11 | Places         | avg_rating above 5 is rejected                        | PASS
+ 12 | Places         | negative review_count is rejected                     | PASS
+ 13 | Places         | a map node that a place uses cannot be deleted        | PASS
+ 14 | Places         | extra place can be inserted                           | PASS
+ 15 | Places         | hours for the extra place can be inserted             | PASS
+ 16 | Places         | tag link for the extra place can be inserted          | PASS
+ 17 | Places         | place can be deleted                                  | PASS
+ 18 | Places         | deleting a place also removes its hours and tag links | PASS
+ 19 | Map            | negative fare is rejected                             | PASS
+ 20 | Map            | zero distance is rejected                             | PASS
+ 21 | Map            | edge from a node to itself is rejected                | PASS
+ 22 | Map            | unknown transport mode is rejected                    | PASS
+ 23 | Map            | edge to a node that does not exist is rejected        | PASS
+ 24 | Map            | two nodes with the same name are rejected             | PASS
+ 25 | Map            | valid edge is accepted                                | PASS
+ 26 | Opening hours  | day 8 is rejected                                     | PASS
+ 27 | Opening hours  | day 0 is rejected                                     | PASS
+ 28 | Opening hours  | two rows for the same place and day are rejected      | PASS
+ 29 | Opening hours  | closing after midnight (20:00 to 03:00) is accepted   | PASS
+ 30 | Users          | duplicate email is rejected                           | PASS
+ 31 | Users          | unknown role is rejected                              | PASS
+ 32 | Reference data | duplicate category name is rejected                   | PASS
+ 33 | Reference data | duplicate tag name is rejected                        | PASS
+ 34 | Trips          | trip for a user that does not exist is rejected       | PASS
+ 35 | Trips          | leg number 0 is rejected                              | PASS
+ 36 | Trips          | leg that uses an edge that does not exist is rejected | PASS
+(36 rows)
+
+ passed | failed 
+--------+--------
+     36 |      0
+(1 row)
+
+ # | test | what went wrong 
+---+------+-----------------
+(0 rows)
+
+ROLLBACK

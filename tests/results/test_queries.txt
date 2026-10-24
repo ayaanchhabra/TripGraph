@@ -1,0 +1,54 @@
+BEGIN
+CREATE TABLE
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+INSERT 0 4
+INSERT 0 5
+INSERT 0 1
+INSERT 0 1
+INSERT 0 7
+INSERT 0 7
+INSERT 0 1
+INSERT 0 1
+INSERT 0 3
+INSERT 0 1
+ #  |         area          |                                      test                                      | status 
+----+-----------------------+--------------------------------------------------------------------------------+--------
+  1 | is_open_at            | open at 10:00                                                                  | PASS
+  2 | is_open_at            | open exactly at opening time 09:00                                             | PASS
+  3 | is_open_at            | closed one minute before opening                                               | PASS
+  4 | is_open_at            | open one minute before closing                                                 | PASS
+  5 | is_open_at            | closed exactly at closing time 22:00                                           | PASS
+  6 | is_open_at            | after-midnight shop: open at 19:00                                             | PASS
+  7 | is_open_at            | after-midnight shop: closed at 17:59                                           | PASS
+  8 | is_open_at            | after-midnight shop: still open at 01:59 the next morning                      | PASS
+  9 | is_open_at            | after-midnight shop: closed at 02:00                                           | PASS
+ 10 | is_open_at            | after-midnight shop: closed at 03:00                                           | PASS
+ 11 | is_open_at            | a place that does not exist counts as closed                                   | PASS
+ 12 | open_now view         | view agrees with is_open_at for the current Indian time                        | PASS
+ 13 | top_rated_places view | places with no reviews are not listed                                          | PASS
+ 14 | top_rated_places view | places with reviews are listed                                                 | PASS
+ 15 | top_rated_places view | shows the average rating and review count (4.50 / 2)                           | PASS
+ 16 | top_rated_places view | higher-rated place ranks above lower-rated place in the same category          | PASS
+ 17 | cheapest_route        | cheapest = free walk (1 leg, Rs 0, 20 min)                                     | PASS
+ 18 | cheapest_route        | fastest = walk + e-rickshaw (2 legs, Rs 10, 10 min)                            | PASS
+ 19 | cheapest_route        | fare budget of Rs 5 rules out the e-rickshaw even when fastest is wanted       | PASS
+ 20 | cheapest_route        | deadline of 12:15 rules out the 20-minute walk                                 | PASS
+ 21 | cheapest_route        | leaving 21:45: free walk arrives 22:05 (closed), so the faster route is chosen | PASS
+ 22 | cheapest_route        | leaving 21:55: every route arrives after closing, so no route                  | PASS
+ 23 | cheapest_route        | limit of 1 leg allows only the direct walk                                     | PASS
+ 24 | cheapest_route        | a place on a node nothing connects to gives no route                           | PASS
+ 25 | cheapest_route        | legs come back in order with running totals (leg 2 total fare = 10)            | PASS
+(25 rows)
+
+ passed | failed 
+--------+--------
+     25 |      0
+(1 row)
+
+ # | test | what went wrong 
+---+------+-----------------
+(0 rows)
+
+ROLLBACK

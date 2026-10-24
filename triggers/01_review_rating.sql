@@ -14,7 +14,10 @@ BEGIN
   -- time, the second one waits here until the first commits, and then counts
   -- again with a fresh view of the data. Without this lock both could compute
   -- the same stale count (a "lost update").
-  PERFORM 1 FROM place WHERE place_id = p_place_id FOR UPDATE;
+  -- NO KEY UPDATE (not plain FOR UPDATE) on purpose: inserting a review already takes a
+  -- lighter lock on the place row for the foreign-key check, and asking for FOR UPDATE
+  -- on top of it makes concurrent reviewers deadlock each other. NO KEY UPDATE does not.
+  PERFORM 1 FROM place WHERE place_id = p_place_id FOR NO KEY UPDATE;
 
   UPDATE place
   SET review_count = (SELECT count(*)                      FROM review WHERE place_id = p_place_id),

@@ -1,5 +1,6 @@
 // TripGraph relational schema (for dbdiagram.io)
-// Synced with schema/01_tables.sql (K). CHECK/UNIQUE rules live in 02_constraints.sql.
+// Synced with 01_tables.sql and K's final 14-table list. CHECK/UNIQUE/FK rules live in 02_constraints.sql.
+// favorite is created in schema/04_favorites.sql; its column types below are suggestions, check against that file.
 
 Table app_user {
   user_id int [pk, increment]
@@ -11,13 +12,13 @@ Table app_user {
 
 Table category {
   category_id int [pk, increment]
-  name text [not null]
+  name text [not null, note: 'UNIQUE']
   group_name text [not null, note: 'e.g. Food and drink, Essentials']
 }
 
 Table node {
   node_id int [pk, increment]
-  name text [not null]
+  name text [not null, note: 'UNIQUE']
   kind text [not null, note: 'gate, metro, bus stop, e-rickshaw stand, place']
 }
 
@@ -55,7 +56,7 @@ Table food_outlet {
 
 Table tag {
   tag_id int [pk, increment]
-  name text [not null]
+  name text [not null, note: 'UNIQUE']
 }
 
 Table place_tag {
@@ -88,6 +89,16 @@ Table review {
   }
 }
 
+Table favorite {
+  user_id int [not null]
+  place_id int [not null]
+  visited boolean [note: 'suggested type']
+  saved_at timestamptz [note: 'suggested type']
+  indexes {
+    (user_id, place_id) [pk]
+  }
+}
+
 Table trip {
   trip_id int [pk, increment]
   user_id int [not null]
@@ -110,7 +121,7 @@ Table audit_log {
   table_name text [not null]
   record_id text
   logged_at timestamptz [not null, default: `now()`]
-  Note: 'Optional, written by triggers'
+  Note: 'Standalone log table, no foreign keys'
 }
 
 // Foreign keys (defined in 02_constraints.sql)
@@ -124,15 +135,9 @@ Ref: review.user_id > app_user.user_id
 Ref: review.place_id > place.place_id
 Ref: edge.from_node > node.node_id
 Ref: edge.to_node > node.node_id
+Ref: favorite.user_id > app_user.user_id
+Ref: favorite.place_id > place.place_id
 Ref: trip.user_id > app_user.user_id
 Ref: trip_leg.trip_id > trip.trip_id
 Ref: trip_leg.edge_id > edge.edge_id
 
-// Pending with K/S: favorites is not in 01_tables.sql yet.
-// Table favorites {
-//   user_id int
-//   place_id int
-//   indexes { (user_id, place_id) [pk] }
-// }
-// Ref: favorites.user_id > app_user.user_id
-// Ref: favorites.place_id > place.place_id

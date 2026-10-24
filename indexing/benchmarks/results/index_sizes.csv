@@ -1,0 +1,11 @@
+stage,index_name,size_kb
+2_btree,idx_place_category_price,712
+2_btree,idx_place_name_btree,4040
+2_btree,idx_place_toprated_partial,544
+3_hash,idx_place_category_price,712
+3_hash,idx_place_name_hash,4112
+3_hash,idx_place_toprated_partial,544
+4_btree_gin,idx_place_category_price,712
+4_btree_gin,idx_place_name_btree,4040
+4_btree_gin,idx_place_name_fts_gin,5888
+4_btree_gin,idx_place_toprated_partial,544

@@ -1,0 +1,86 @@
+ === Q1_category_price   [1_no_index] ===
+
+ Seq Scan on place  (cost=0.00..4483.00 rows=5699 width=33) (actual time=0.019..19.192 rows=5634 loops=1)
+   Filter: ((price_level <= 2) AND (category_id = 3))
+   Rows Removed by Filter: 94366
+   Buffers: shared hit=2983
+ Planning Time: 0.054 ms
+ Execution Time: 19.494 ms
+
+ === Q2_name_lookup   [1_no_index] ===
+
+ Seq Scan on place  (cost=0.00..4233.00 rows=1 width=31) (actual time=11.040..13.340 rows=1 loops=1)
+   Filter: (name = 'Gupta Mart 50000'::text)
+   Rows Removed by Filter: 99999
+   Buffers: shared hit=2983
+ Planning Time: 0.065 ms
+ Execution Time: 13.362 ms
+
+ === Q3_top_rated_stored   [1_no_index] ===
+
+ Limit  (cost=4506.68..4506.71 rows=10 width=33) (actual time=17.228..17.230 rows=10 loops=1)
+   Buffers: shared hit=2983
+   ->  Sort  (cost=4506.68..4509.42 rows=1096 width=33) (actual time=17.226..17.227 rows=10 loops=1)
+         Sort Key: avg_rating DESC
+         Sort Method: top-N heapsort  Memory: 26kB
+         Buffers: shared hit=2983
+         ->  Seq Scan on place  (cost=0.00..4483.00 rows=1096 width=33) (actual time=0.018..16.885 rows=1112 loops=1)
+               Filter: ((review_count >= 5) AND (category_id = 3))
+               Rows Removed by Filter: 98888
+               Buffers: shared hit=2983
+ Planning Time: 0.075 ms
+ Execution Time: 17.250 ms
+
+ === Q4_fulltext_name   [1_no_index] ===
+
+ Gather  (cost=1000.00..19424.38 rows=2 width=23) (actual time=0.713..124.364 rows=269 loops=1)
+   Workers Planned: 1
+   Workers Launched: 1
+   Buffers: shared hit=3095
+   ->  Parallel Seq Scan on place  (cost=0.00..18424.18 rows=1 width=23) (actual time=0.758..97.087 rows=134 loops=2)
+         Filter: (to_tsvector('simple'::regconfig, name) @@ '''balaji'' & ''tiffin'''::tsquery)
+         Rows Removed by Filter: 49866
+         Buffers: shared hit=3095
+ Planning Time: 0.063 ms
+ Execution Time: 124.405 ms
+
+ === Q5_top_rated_computed   [1_no_index] ===
+
+ Limit  (cost=10694.63..10694.65 rows=10 width=95) (actual time=62.227..62.486 rows=10 loops=1)
+   Buffers: shared hit=5343
+   ->  Sort  (cost=10694.63..10700.21 rows=2234 width=95) (actual time=62.226..62.483 rows=10 loops=1)
+         Sort Key: (avg(r.rating)) DESC
+         Sort Method: top-N heapsort  Memory: 26kB
+         Buffers: shared hit=5343
+         ->  Finalize HashAggregate  (cost=10540.22..10646.35 rows=2234 width=95) (actual time=60.283..62.228 rows=1112 loops=1)
+               Group Key: p.place_id, p.name
+               Filter: (count(*) >= 5)
+               Batches: 1  Memory Usage: 1489kB
+               Rows Removed by Filter: 4736
+               Buffers: shared hit=5343
+               ->  Gather  (cost=9735.86..10473.19 rows=6703 width=63) (actual time=55.584..57.716 rows=8328 loops=1)
+                     Workers Planned: 1
+                     Workers Launched: 1
+                     Buffers: shared hit=5343
+                     ->  Partial HashAggregate  (cost=8735.86..8802.89 rows=6703 width=63) (actual time=35.277..36.023 rows=4164 loops=2)
+                           Group Key: p.place_id, p.name
+                           Batches: 1  Memory Usage: 1233kB
+                           Buffers: shared hit=5343
+                           Worker 0:  Batches: 1  Memory Usage: 977kB
+                           ->  Parallel Hash Join  (cost=3767.58..8617.71 rows=11815 width=27) (actual time=4.869..31.660 rows=9956 loops=2)
+                                 Hash Cond: (r.place_id = p.place_id)
+                                 Buffers: shared hit=5343
+                                 ->  Parallel Seq Scan on review r  (cost=0.00..4119.64 rows=176264 width=8) (actual time=0.006..8.043 rows=149824 loops=2)
+                                       Buffers: shared hit=2357
+                                 ->  Parallel Hash  (cost=3718.29..3718.29 rows=3943 width=23) (actual time=4.783..4.784 rows=3306 loops=2)
+                                       Buckets: 8192  Batches: 1  Memory Usage: 480kB
+                                       Buffers: shared hit=2983
+                                       ->  Parallel Seq Scan on place p  (cost=0.00..3718.29 rows=3943 width=23) (actual time=0.013..8.264 rows=6611 loops=1)
+                                             Filter: (category_id = 3)
+                                             Rows Removed by Filter: 93389
+                                             Buffers: shared hit=2983
+ Planning:
+   Buffers: shared hit=2
+ Planning Time: 0.159 ms
+ Execution Time: 62.954 ms
+

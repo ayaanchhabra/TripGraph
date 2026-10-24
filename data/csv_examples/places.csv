@@ -1,0 +1,11 @@
+place_id,name,category_name,address,lat,lon,price_level,student_discount,node_name,cuisine,is_veg
+1,Cafe X,Cafes,"Near NSUT Main Gate, Dwarka",28.6105,77.0368,2,true,Cafe X,Continental,true
+2,Dhaba Y,Restaurants and dhabas,"Market Chowk, Dwarka",28.6082,77.0391,1,false,Dhaba Y,North Indian,false
+3,Chaat Corner,Street food and chaat,"Near Main Gate, Dwarka",28.6090,77.0352,1,false,Chaat Corner,Chaat,true
+4,Chai Tapri,"Juice, shakes and chai points","Near Main Gate, Dwarka",28.6091,77.0353,1,false,Chaat Corner,Beverages,true
+5,Print Point,Stationery and photocopy/printing,"Opp. NSUT Gate, Dwarka",28.6098,77.0361,1,true,Stationery and Photocopy Shop,,
+6,Book Nook,Books and second-hand books,"Opp. NSUT Gate, Dwarka",28.6099,77.0362,2,true,Stationery and Photocopy Shop,,
+7,Fresh Mart,Grocery and general stores,"Market Chowk, Dwarka",28.6080,77.0388,1,false,Grocery Store,,
+8,Care Pharmacy,Medical stores and clinics,"Market Chowk, Dwarka",28.6085,77.0394,1,false,Medical Store,,
+9,City Park,Parks and open spaces,"Sector 3, Dwarka",28.6120,77.0400,1,false,City Park,,
+10,Metro Mall,Malls and movie halls,"Near Metro Station B, Dwarka",28.6150,77.0450,3,false,Mall,,

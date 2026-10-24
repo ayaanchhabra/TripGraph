@@ -1,0 +1,6 @@
+qname,no_index_ms,btree_ms,hash_ms,btree_gin_ms,best_speedup_x
+Q1_category_price,11.172,5.791,7.594,5.924,1.9
+Q2_name_lookup,9.169,0.039,0.021,0.034,436.6
+Q3_top_rated_stored,17.729,0.033,0.036,0.036,537.2
+Q4_fulltext_name,129.721,189.905,193.154,1.407,92.2
+Q5_top_rated_computed,62.910,124.931,99.571,102.488,0.6

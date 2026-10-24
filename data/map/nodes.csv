@@ -1,0 +1,16 @@
+node_id,name,kind
+1,NSUT Main Gate,gate
+2,NSUT Back Gate,gate
+3,Main Gate E-Rickshaw Stand,erickshaw_stand
+4,Sector 3 Bus Stop,bus_stop
+5,Metro Station A,metro
+6,Market Chowk E-Rickshaw Stand,erickshaw_stand
+7,Metro Station B,metro
+8,Cafe X,place
+9,Dhaba Y,place
+10,Stationery and Photocopy Shop,place
+11,Chaat Corner,place
+12,Grocery Store,place
+13,Medical Store,place
+14,City Park,place
+15,Mall,place

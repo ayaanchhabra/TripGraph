@@ -1,0 +1,86 @@
+ === Q1_category_price   [3_hash] ===
+
+ Bitmap Heap Scan on place  (cost=75.78..3203.08 rows=5413 width=33) (actual time=0.548..3.512 rows=5605 loops=1)
+   Recheck Cond: ((category_id = 3) AND (price_level <= 2))
+   Heap Blocks: exact=1873
+   Buffers: shared hit=1880
+   ->  Bitmap Index Scan on idx_place_category_price  (cost=0.00..74.42 rows=5413 width=0) (actual time=0.288..0.289 rows=5605 loops=1)
+         Index Cond: ((category_id = 3) AND (price_level <= 2))
+         Buffers: shared hit=7
+ Planning Time: 0.038 ms
+ Execution Time: 3.785 ms
+
+ === Q2_name_lookup   [3_hash] ===
+
+ Index Scan using idx_place_name_hash on place  (cost=0.00..8.02 rows=1 width=31) (actual time=0.014..0.015 rows=1 loops=1)
+   Index Cond: (name = 'Student Mart 50000'::text)
+   Buffers: shared hit=2
+ Planning Time: 0.048 ms
+ Execution Time: 0.025 ms
+
+ === Q3_top_rated_stored   [3_hash] ===
+
+ Limit  (cost=0.29..34.45 rows=10 width=33) (actual time=0.017..0.031 rows=10 loops=1)
+   Buffers: shared hit=12
+   ->  Index Scan using idx_place_toprated_partial on place  (cost=0.29..3713.24 rows=1087 width=33) (actual time=0.016..0.029 rows=10 loops=1)
+         Index Cond: (category_id = 3)
+         Buffers: shared hit=12
+ Planning Time: 0.071 ms
+ Execution Time: 0.039 ms
+
+ === Q4_fulltext_name   [3_hash] ===
+
+ Gather  (cost=1000.00..19423.38 rows=2 width=23) (actual time=0.723..103.132 rows=317 loops=1)
+   Workers Planned: 1
+   Workers Launched: 1
+   Buffers: shared hit=3094
+   ->  Parallel Seq Scan on place  (cost=0.00..18423.18 rows=1 width=23) (actual time=1.150..97.709 rows=158 loops=2)
+         Filter: (to_tsvector('simple'::regconfig, name) @@ '''balaji'' & ''tiffin'''::tsquery)
+         Rows Removed by Filter: 49842
+         Buffers: shared hit=3094
+ Planning Time: 0.041 ms
+ Execution Time: 103.170 ms
+
+ === Q5_top_rated_computed   [3_hash] ===
+
+ Limit  (cost=10018.04..10018.07 rows=10 width=95) (actual time=48.517..48.742 rows=10 loops=1)
+   Buffers: shared hit=4313
+   ->  Sort  (cost=10018.04..10023.34 rows=2121 width=95) (actual time=48.514..48.738 rows=10 loops=1)
+         Sort Key: (avg(r.rating)) DESC
+         Sort Method: top-N heapsort  Memory: 26kB
+         Buffers: shared hit=4313
+         ->  Finalize HashAggregate  (cost=9871.46..9972.21 rows=2121 width=95) (actual time=46.756..48.452 rows=1113 loops=1)
+               Group Key: p.place_id, p.name
+               Filter: (count(*) >= 5)
+               Batches: 1  Memory Usage: 1489kB
+               Rows Removed by Filter: 4683
+               Buffers: shared hit=4313
+               ->  Gather  (cost=9107.90..9807.83 rows=6363 width=63) (actual time=42.217..44.126 rows=9035 loops=1)
+                     Workers Planned: 1
+                     Workers Launched: 1
+                     Buffers: shared hit=4313
+                     ->  Partial HashAggregate  (cost=8107.90..8171.53 rows=6363 width=63) (actual time=39.963..40.824 rows=4518 loops=2)
+                           Group Key: p.place_id, p.name
+                           Batches: 1  Memory Usage: 1233kB
+                           Buffers: shared hit=4313
+                           Worker 0:  Batches: 1  Memory Usage: 1233kB
+                           ->  Parallel Hash Join  (cost=3149.18..7995.75 rows=11215 width=27) (actual time=3.284..35.844 rows=9700 loops=2)
+                                 Hash Cond: (r.place_id = p.place_id)
+                                 Buffers: shared hit=4313
+                                 ->  Parallel Seq Scan on review r  (cost=0.00..4119.62 rows=176262 width=8) (actual time=0.010..12.993 rows=149822 loops=2)
+                                       Buffers: shared hit=2357
+                                 ->  Parallel Hash  (cost=3102.39..3102.39 rows=3743 width=23) (actual time=3.140..3.142 rows=3290 loops=2)
+                                       Buckets: 8192  Batches: 1  Memory Usage: 480kB
+                                       Buffers: shared hit=1953
+                                       ->  Parallel Bitmap Heap Scan on place p  (cost=73.61..3102.39 rows=3743 width=23) (actual time=0.426..2.121 rows=3290 loops=2)
+                                             Recheck Cond: (category_id = 3)
+                                             Heap Blocks: exact=1702
+                                             Buffers: shared hit=1953
+                                             ->  Bitmap Index Scan on idx_place_category_price  (cost=0.00..72.02 rows=6363 width=0) (actual time=0.505..0.505 rows=6580 loops=1)
+                                                   Index Cond: (category_id = 3)
+                                                   Buffers: shared hit=8
+ Planning:
+   Buffers: shared hit=2
+ Planning Time: 0.235 ms
+ Execution Time: 48.863 ms
+

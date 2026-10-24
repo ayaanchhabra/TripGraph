@@ -1,0 +1,13 @@
+place_id,name,category_name,address,lat,lon,price_level,student_discount,node_name,cuisine,is_veg
+1,Sample Dhaba,Restaurants and dhabas,"Near Sector 3 market, Dwarka",28.61,77.037,2,false,Dhaba Y,North Indian,false
+2,Sample Chaat Stall,Street food and chaat,Outside NSUT main gate,28.6095,77.0365,1,true,Chaat Corner,Chaat,true
+3,Sample Study Cafe,Cafes,"Sector 3 market, Dwarka",28.6105,77.038,2,true,Cafe X,Cafe,true
+4,Sample Chai Point,"Juice, shakes and chai points","Market chowk, Dwarka",28.6108,77.0372,1,false,Market Chowk E-Rickshaw Stand,Chai,true
+5,Sample Xerox and Printing,Stationery and photocopy/printing,Opposite NSUT gate,28.6093,77.0368,1,true,Stationery and Photocopy Shop,,
+6,Sample Book Corner,Books and second-hand books,"Sector 3 market, Dwarka",28.6094,77.0369,1,true,Stationery and Photocopy Shop,,
+7,Sample Daily Needs Store,Grocery and general stores,"Sector 3, Dwarka",28.6112,77.0376,1,false,Grocery Store,,
+8,Sample Medical Store,Medical stores and clinics,"Main road, Dwarka",28.611,77.0385,1,false,Medical Store,,
+9,Sample Gym,Gyms and sports,Near metro station,28.612,77.039,2,true,Metro Station A,,
+10,Sample Park,Parks and open spaces,"Sector 3, Dwarka",28.6115,77.036,1,false,City Park,,
+11,Sample Gaming Zone,Gaming zones and cyber cafes,"Mall, Dwarka",28.6125,77.0395,2,true,Mall,,
+12,Sample Movie Hall,Malls and movie halls,"Mall, Dwarka",28.6125,77.0396,3,false,Mall,,

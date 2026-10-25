@@ -44,19 +44,31 @@ psql -U postgres -d tripgraph -f indexing/viva_demo.sql
 ```
 Stages: `1_no_index`, `2_btree`, `3_hash`, `4_btree_gin`. Each query is run 1 warm-up + 5 timed times; the table shows the **median**.
 
-## 4. Results table (fill from `results/summary.csv`, then send to AJ)
+## 4. Results table
+
+Median of 5 timed runs, in ms (from `results/summary.csv`). `place` has 100k+ generated rows;
+`review` has about 300k rows (149,824 rows per worker, 2 workers).
 
 | Query | No index (ms) | B-tree (ms) | Hash (ms) | B-tree + GIN (ms) | Scan used after |
 |---|---|---|---|---|---|
-| Q1_category_price | | | | | |
-| Q2_name_lookup | | | | | |
-| Q3_top_rated_stored | | | | | |
-| Q4_fulltext_name | | | | | |
-| Q5_top_rated_computed | | | | | |
+| Q1_category_price | 11.172 | 5.791 | 7.594 | 5.924 | Bitmap Index Scan on `idx_place_category_price` |
+| Q2_name_lookup | 9.169 | 0.039 | 0.021 | 0.034 | Index Scan using `idx_place_name_btree` (B-tree stage) or `idx_place_name_hash` (hash stage) |
+| Q3_top_rated_stored | 17.729 | 0.033 | 0.036 | 0.036 | Index Scan using `idx_place_toprated_partial` |
+| Q4_fulltext_name | 129.721 | 189.905 | 193.154 | 1.407 | Bitmap Index Scan on `idx_place_name_fts_gin` (GIN stage only; Seq Scan in the other stages) |
+| Q5_top_rated_computed | 62.910 | 124.931 | 99.571 | 102.488 | Parallel Seq Scan on `review` (and Parallel Seq Scan or Bitmap scan on `place`); no index helps |
 
-Expected pattern (check against YOUR numbers, do not copy this): Q1 and Q3 drop clearly with B-tree;
-Q2 drops a lot with both B-tree and hash and the two are close; Q4 only drops in the GIN stage;
-Q5 stays slow whatever we do. If a result surprises you, open `results/<stage>_plans.txt` and find out why. That is the viva answer.
+### How to read this
+Each row is one query timed in four stages; a smaller number is faster, and the last column
+names the scan the planner used once the indexes existed. Q2 and Q3 gain the most
+(about 437x and 537x) because they fetch very few rows, Q1 gains only about 1.9x because it returns
+5,634 rows, and Q4 gains about 92x but only in the GIN stage (129.7 -> 1.4 ms).
+
+Q4 got slower in the B-tree and hash stages (129.7 -> 189.9 / 193.2 ms). This is not an effect of
+the index: neither a B-tree nor a hash index can serve a word-inside-text search, so the plan is
+still a Seq Scan and the difference is run-to-run noise (cache state, parallel workers).
+Q5 also got slower (62.9 -> 124.9 / 99.6 / 102.5 ms) for the same reason: its cost is reading and
+aggregating the `review` rows, which no index on `place` can reduce. Its `best_speedup_x` of 0.6
+means "no index improved it". That is the point of Q5: only the stored `avg_rating` (Q3) avoids the work.
 
 ## 5. Test checklist
 - [ ] `bench_checks.sql` checks 2 to 7 return 0 rows before you benchmark.

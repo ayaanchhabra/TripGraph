@@ -21,7 +21,15 @@ not a design mistake.
 - Benchmark evidence: queries Q3 (stored value) vs Q5 (computed from reviews) in
   `indexing/benchmarks/results/summary.csv`. Same answer, Q3 can use the partial index
   `idx_place_toprated_partial` and reads a few pages; Q5 has to read and aggregate the reviews.
-  (Fill in your measured numbers: Q3 = ___ ms, Q5 = ___ ms, ratio = ___x.)
+  Measured (median of 5 runs, 100k+ places, about 300k reviews): Q3 = 0.033 ms (B-tree stage,
+  partial index), Q5 = 62.910 ms (its best stage, no index). Ratio = 62.910 / 0.033 = 1906, so
+  about 1,900x. If Q5 is taken from the B-tree stage instead (124.931 ms), the ratio is
+  124.931 / 0.033 = 3786, about 3,800x.
+
+  Q5 did not get faster with indexes because its cost is reading and aggregating about 300k
+  `review` rows (an AVG per place), and the indexes on `place` cannot reduce that work; the
+  benchmark schema also has no index on `review(place_id)`. Only the stored `avg_rating`
+  removes the aggregation.
 
 ## What we pay
 - Extra work on every review insert/update/delete (the trigger recomputes the two columns).

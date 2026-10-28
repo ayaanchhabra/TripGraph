@@ -1,0 +1,15 @@
+BEGIN
+CREATE TABLE
+DO
+                 check_name                 | result 
+--------------------------------------------+--------
+ same price ranks first                     | PASS
+ the place itself is never returned         | PASS
+ other categories are never returned        | PASS
+ prices within one level are returned       | PASS
+ discount filter keeps only discount places | PASS
+ limit 1 returns one row                    | PASS
+ unknown place id returns no rows           | PASS
+(7 rows)
+
+ROLLBACK

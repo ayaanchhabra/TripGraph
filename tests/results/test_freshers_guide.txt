@@ -1,0 +1,17 @@
+BEGIN
+CREATE TABLE
+DO
+                         check_name                         | result 
+------------------------------------------------------------+--------
+ price 1 food place is listed                               | PASS
+ price 2 with student discount is listed                    | PASS
+ price 2 without discount is not listed                     | PASS
+ price 3 is not listed even with discount                   | PASS
+ cheap place that is not a food outlet is not listed        | PASS
+ cuisine rank follows rating (4.5 -> 1, 4.0 -> 2, 3.0 -> 3) | PASS
+ ranks inside one cuisine are not repeated here             | PASS
+ every listed place meets the price rule                    | PASS
+ no place is listed twice                                   | PASS
+(9 rows)
+
+ROLLBACK

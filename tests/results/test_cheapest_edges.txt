@@ -1,0 +1,9 @@
+                    check_name                    | result 
+--------------------------------------------------+--------
+ one row per node pair                            | PASS
+ no pair appears twice                            | PASS
+ every kept edge has the lowest fare for its pair | PASS
+ on a fare tie the shorter time is kept           | PASS
+ alternatives = other edges between the same pair | PASS
+(5 rows)
+

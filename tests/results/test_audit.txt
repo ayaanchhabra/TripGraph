@@ -1,0 +1,12 @@
+BEGIN
+CREATE TABLE
+DO
+             check_name             | result 
+------------------------------------+--------
+ place edit is logged               | PASS
+ rating-only update is not logged   | PASS
+ edge fare change is logged         | PASS
+ place insert and delete are logged | PASS
+(4 rows)
+
+ROLLBACK

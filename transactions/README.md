@@ -1,4 +1,4 @@
-# Concurrency demo: the lost update (K)
+# Concurrency demo: the lost update 
 
 **Idea:** two students review the same place at the same moment. The place's `review_count`
 should go up by 2. With a bug it goes up by 1: one update is silently lost.

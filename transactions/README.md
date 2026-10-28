@@ -124,3 +124,30 @@ PostgreSQL never lets a transaction read uncommitted data (no dirty reads), so e
 - PostgreSQL uses **MVCC**: readers see a snapshot and never block writers; writers lock only the rows they change.
   SERIALIZABLE adds checks (SSI) that abort a transaction when a non-serializable pattern appears, which is why
   Fix B throws serialization errors and needs retries.
+
+---
+
+# Concurrency demo: the deadlock (K)
+
+**Idea:** two transactions each hold a row lock the other one needs, so neither can ever continue.
+PostgreSQL notices the circular wait and aborts one of them.
+
+| File | What it does |
+|---|---|
+| `deadlock_demo.sh` | runs the whole demo automatically with two psql sessions |
+| `deadlock_demo.sql` | the same demo as step-by-step instructions for two terminals |
+
+Both use `UPDATE place SET name = name`, which takes the row lock but changes no data, and every session ends in ROLLBACK.
+
+## Run it
+```bash
+bash transactions/deadlock_demo.sh tripgraph
+```
+Part 1 locks two places in opposite order (A: 1 then 2, B: 2 then 1). One session is aborted with
+`ERROR: deadlock detected`. Part 2 locks them in the same order (lowest id first). Both sessions finish normally.
+
+## Why it happens and how it is fixed
+- Part 1 is a circular wait: A holds place 1 and wants place 2, B holds place 2 and wants place 1.
+- PostgreSQL waits `deadlock_timeout` (1 second by default), finds the cycle in the waits-for graph and aborts one transaction.
+- Fix: every transaction locks rows in the same global order. A circle of waits is then impossible.
+- The same cause is behind the deadlocks we measured above with plain `FOR UPDATE` in the rating trigger: it asked for a stronger lock than the foreign-key check already held, so two reviewers waited on each other. `FOR NO KEY UPDATE` does not conflict with that lock.

@@ -1,0 +1,39 @@
+-- transactions/deadlock_demo.sql
+-- Manual deadlock demo. Needs TWO terminal windows, each with:  psql -d tripgraph
+-- Nothing is changed for real: UPDATE place SET name = name keeps the same value,
+-- so it takes the row lock without editing anything, and both sessions end in ROLLBACK.
+--
+-- First pick two places (any session):
+--   SELECT place_id, name FROM place ORDER BY place_id LIMIT 2;     -- say 1 and 2
+--
+-- ===== PART 1: the deadlock (locks taken in opposite order) =====
+--
+-- STEP 1  Session A:  BEGIN;
+--                     UPDATE place SET name = name WHERE place_id = 1;     -- A holds place 1
+-- STEP 2  Session B:  BEGIN;
+--                     UPDATE place SET name = name WHERE place_id = 2;     -- B holds place 2
+-- STEP 3  Session A:  UPDATE place SET name = name WHERE place_id = 2;     -- A waits for B
+-- STEP 4  Session B:  UPDATE place SET name = name WHERE place_id = 1;     -- B waits for A: cycle
+--
+-- After about one second (deadlock_timeout) PostgreSQL detects the cycle and aborts ONE of
+-- the sessions with:  ERROR: deadlock detected. The other session's UPDATE then goes through.
+--
+-- STEP 5  Both sessions:  ROLLBACK;
+--
+-- ===== PART 2: the fix (always lock in the same order, lowest id first) =====
+--
+-- STEP 1  Session A:  BEGIN;
+--                     UPDATE place SET name = name WHERE place_id = 1;
+-- STEP 2  Session B:  BEGIN;
+--                     UPDATE place SET name = name WHERE place_id = 1;     -- B waits here, no cycle
+-- STEP 3  Session A:  UPDATE place SET name = name WHERE place_id = 2;
+--                     COMMIT;                                              -- B is released
+-- STEP 4  Session B:  UPDATE place SET name = name WHERE place_id = 2;
+--                     COMMIT;
+--
+-- No deadlock: a cycle needs a circular wait, and one global order of locking makes
+-- a circle impossible.
+--
+-- To see who is waiting for whom while the sessions are stuck (third window):
+--   SELECT pid, pg_blocking_pids(pid) AS blocked_by, state, left(query, 50) AS query
+--   FROM pg_stat_activity WHERE datname = 'tripgraph' AND cardinality(pg_blocking_pids(pid)) > 0;

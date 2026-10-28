@@ -84,6 +84,23 @@ BEGIN
   ELSE
     RAISE NOTICE 'view trending_this_month does not exist yet: run it when it is added, then run this file again';
   END IF;
+  IF to_regclass('cheapest_edges') IS NOT NULL THEN
+    GRANT SELECT ON cheapest_edges TO tripgraph_student;
+  ELSE
+    RAISE NOTICE 'view cheapest_edges does not exist yet: run queries/views/cheapest_edges.sql, then run this file again';
+  END IF;
+
+  IF to_regclass('freshers_guide_cheap_eats') IS NOT NULL THEN
+    GRANT SELECT ON freshers_guide_cheap_eats TO tripgraph_student;
+  ELSE
+    RAISE NOTICE 'view freshers_guide_cheap_eats does not exist yet: run queries/views/freshers_guide_cheap_eats.sql, then run this file again';
+  END IF;
+
+  IF to_regprocedure('similar_places(integer,integer,boolean)') IS NOT NULL THEN
+    GRANT EXECUTE ON FUNCTION similar_places(integer, integer, boolean) TO tripgraph_student;
+  ELSE
+    RAISE NOTICE 'similar_places() does not exist yet: run queries/procedures/01_similar_places.sql, then run this file again';
+  END IF;
 END $$;
 
 -- ---------------------------------------------------------------------------

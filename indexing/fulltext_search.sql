@@ -1,4 +1,4 @@
--- indexing/fulltext_search.sql   (A)
+-- indexing/fulltext_search.sql
 -- Ranked full-text search over place NAME and TAGS, in the public schema.
 -- Run from the repo root, after schema + data are loaded:
 --   psql -U postgres -d tripgraph -f indexing/fulltext_search.sql

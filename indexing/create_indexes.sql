@@ -1,4 +1,4 @@
--- indexing/create_indexes.sql   (A)   PHASE 4
+-- indexing/create_indexes.sql   PHASE 4
 -- Builds indexes on bench.place (the 100k+ generated table).
 -- Run from the REPO ROOT:
 --   psql -U postgres -d tripgraph -f indexing/create_indexes.sql                  (mode "all")

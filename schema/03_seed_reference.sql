@@ -1,4 +1,4 @@
--- schema/03_seed_reference.sql   (K)
+-- schema/03_seed_reference.sql
 -- Reference data: place categories. Names must match places.csv EXACTLY.
 -- Run after 02_constraints.sql and before data/load_all.sql.
 

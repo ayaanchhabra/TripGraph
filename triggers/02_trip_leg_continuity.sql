@@ -1,4 +1,4 @@
--- triggers/02_trip_leg_continuity.sql   (K)
+-- triggers/02_trip_leg_continuity.sql
 -- A trip is a chain of legs. Rule: leg n must END where leg n+1 STARTS.
 --   leg 1 can start anywhere; legs must be numbered 1, 2, 3 ... with no gaps.
 -- Run after schema/*.sql.

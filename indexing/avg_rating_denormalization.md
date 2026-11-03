@@ -1,6 +1,6 @@
 # Why `place.avg_rating` and `place.review_count` are stored (denormalized)
 
-(A: short note for the report. AJ pastes it in; K's trigger keeps the values correct.)
+(Short note for the report. The rating trigger keeps the values correct.)
 
 ## What is stored twice
 Every rating already exists in `review(user_id, place_id, rating, ...)`.
@@ -33,7 +33,7 @@ not a design mistake.
 
 ## What we pay
 - Extra work on every review insert/update/delete (the trigger recomputes the two columns).
-- A consistency risk, handled by: (1) K's trigger, (2) check 6 in `data/bench_checks.sql`
+- A consistency risk, handled by: (1) the rating trigger, (2) check 6 in `data/bench_checks.sql`
   (stored values vs recomputed values, expect 0 rows), (3) the lost-update demo
   (two sessions updating `review_count` at once; fixed with `SELECT ... FOR UPDATE`).
 

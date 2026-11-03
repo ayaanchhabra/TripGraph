@@ -1,4 +1,4 @@
-# Mini map (A)
+# Mini map
 
 15 nodes and 32 edges (16 two-way roads stored as 2 directed rows each).
 

@@ -1,4 +1,4 @@
-# Relational algebra and tuple relational calculus (A)
+# Relational algebra and tuple relational calculus
 
 Runnable SQL for everything below: `relational_algebra.sql` (same folder).
 Table and column names are exactly those of the TABLES section.

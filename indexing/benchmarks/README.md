@@ -1,4 +1,4 @@
-# Phase 4: indexing and benchmarks (A)
+# Phase 4: indexing and benchmarks
 
 ## 1. Concepts in plain language (read first, these are the viva questions)
 
@@ -80,9 +80,9 @@ means "no index improved it". That is the point of Q5: only the stored `avg_rati
 - [ ] After the run, `\di bench.*` shows no leftover indexes.
 
 ## 6. How it connects
-- **K**: his `top_rated_places` view and category queries are the real-world versions of Q1/Q3. Once you agree, K can add the same indexes to the `public` schema (e.g. `place(category_id, price_level)`, FK columns such as `review(place_id)`). Tell K the exact definitions from `create_indexes.sql`; do not edit his schema files yourself.
-- **AJ**: needs `results/summary.csv`, the `*_plans.txt` screenshots and `avg_rating_denormalization.md` for the report.
-- **S**: his search page can reuse the Q4 full-text query (Phase 5 builds the proper ranked search and tag search).
+- **Top-rated view**: the `top_rated_places` view and category queries are the real-world versions of Q1/Q3. After the index list is agreed, the database team can add the same indexes to the `public` schema (e.g. `place(category_id, price_level)`, FK columns such as `review(place_id)`). Use the exact definitions from `create_indexes.sql` and keep schema changes in the schema-maintenance change.
+- **Report material**: `results/summary.csv`, the `*_plans.txt` screenshots and `avg_rating_denormalization.md` are useful evidence.
+- **Search page**: the Q4 full-text query can be reused (Phase 5 builds the proper ranked search and tag search).
 - **Viva demo step 3** = `indexing/viva_demo.sql`.
 
 ## 7. Questions to be ready for

@@ -1,4 +1,4 @@
--- transactions/lost_update_demo.sql   (K)
+-- transactions/lost_update_demo.sql
 -- Step 1 of the concurrency demo: put in the BUGGY version of the rating helper.
 -- It is the same as triggers/01_review_rating.sql but WITHOUT the row lock.
 -- Run from the repo root:

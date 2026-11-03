@@ -1,4 +1,4 @@
--- queries/views/01_top_rated_places.sql   (K)
+-- queries/views/01_top_rated_places.sql
 -- Ranks places inside each category by average rating (ties broken by more reviews).
 -- Only places with at least one review appear. Uses a window function (RANK).
 --

@@ -1,4 +1,4 @@
--- tests/test_triggers.sql   (K)
+-- tests/test_triggers.sql
 -- Rating trigger (triggers/01_review_rating.sql) and trip-leg trigger (triggers/02_trip_leg_continuity.sql).
 -- Run from the repo root:
 --   psql -U postgres -d tripgraph -f tests/test_triggers.sql

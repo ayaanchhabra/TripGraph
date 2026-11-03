@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-transactions/concurrent_reviews.py   (K)
+transactions/concurrent_reviews.py
 
 Simulates many students reviewing the SAME place at the same moment, then checks whether
 place.review_count and place.avg_rating match the real reviews.

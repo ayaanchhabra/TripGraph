@@ -1,4 +1,4 @@
--- indexing/benchmarks/run_benchmarks.sql   (A)   PHASE 4
+-- indexing/benchmarks/run_benchmarks.sql   PHASE 4
 -- Runs all benchmark queries in four index states and builds the before/after table.
 --   1_no_index   no indexes at all (baseline)
 --   2_btree      B-tree indexes (composite, partial, name)
@@ -12,7 +12,7 @@
 --
 -- Outputs (indexing/benchmarks/results/):
 --   <stage>_plans.txt   full EXPLAIN (ANALYZE, BUFFERS) text per stage (for screenshots)
---   summary.csv         the before/after timing table (send to AJ)
+--   summary.csv         the before/after timing table (include in the report)
 --   index_sizes.csv     size of each index
 -- RE-RUNNABLE: the bench_log schema is rebuilt every time. generate_bulk.sql drops
 -- the bench schema but not bench_log, so just run this again after regenerating data.

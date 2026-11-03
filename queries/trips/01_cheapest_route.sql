@@ -1,4 +1,4 @@
--- queries/trips/01_cheapest_route.sql   (K)
+-- queries/trips/01_cheapest_route.sql
 -- cheapest_route(): best route from the NSUT Main Gate to a place, returned leg by leg.
 --
 -- How it works (explain this in the viva):

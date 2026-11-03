@@ -1,4 +1,4 @@
--- recovery/02_uncommitted_then_wait.sql   (A)   step 2
+-- recovery/02_uncommitted_then_wait.sql   step 2
 -- Run in a psql session and LEAVE IT OPEN. The transaction is never committed.
 -- It prints this session's backend process id: that is the process you kill in step 3.
 BEGIN;

@@ -1,4 +1,4 @@
--- data/bench_checks.sql   (A)
+-- data/bench_checks.sql
 -- Checks the generated bench data. Run from the repo root after generate_bulk.sql:
 --   psql -U postgres -d tripgraph -f data/bench_checks.sql
 

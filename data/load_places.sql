@@ -1,11 +1,11 @@
--- data/load_places.sql   (A)
--- Loads places, food outlets, tags and opening hours from AJ's CSVs.
+-- data/load_places.sql
+-- Loads places, food outlets, tags and opening hours from the place CSV files.
 -- Run from the REPO ROOT, AFTER schema/*.sql and data/map/load_map.sql:
 --   psql -U postgres -d tripgraph -f data/load_places.sql
 --
--- To test before AJ's real files arrive, point the paths below at data/csv_examples/.
+-- To test before the final place CSV files arrive, point the paths below at data/csv_examples/.
 --
--- Why staging tables: AJ's CSVs use readable names (category_name, node_name,
+-- Why staging tables: the place CSV files use readable names (category_name, node_name,
 -- tag_name). This script turns them into category_id / node_id / tag_id, and
 -- stops with a clear message if a name does not match. All-or-nothing: one bad
 -- row rolls back everything.

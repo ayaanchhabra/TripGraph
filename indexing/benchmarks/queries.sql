@@ -1,4 +1,4 @@
--- indexing/benchmarks/queries.sql   (A)
+-- indexing/benchmarks/queries.sql
 -- Defines the benchmark queries ONCE, as rows in bench_log.query.
 -- Included by run_benchmarks.sql (needs bench_log.query to exist and the psql variables
 -- :cat_id and :probe_name to be set). Not meant to be run on its own.

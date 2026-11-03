@@ -1,10 +1,10 @@
--- schema/02_constraints.sql   (K)
+-- schema/02_constraints.sql
 -- UNIQUE, CHECK and FOREIGN KEY rules. Run after 01_tables.sql.
 
 \set ON_ERROR_STOP on
 
 -- ---------- UNIQUE ----------
--- A's loaders look things up by name, so names must be unique.
+-- place loaders look things up by name, so names must be unique.
 ALTER TABLE app_user ADD CONSTRAINT uq_user_email    UNIQUE (email);
 ALTER TABLE category ADD CONSTRAINT uq_category_name UNIQUE (name);
 ALTER TABLE node     ADD CONSTRAINT uq_node_name     UNIQUE (name);

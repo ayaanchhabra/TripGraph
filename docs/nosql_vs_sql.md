@@ -1,0 +1,15 @@
+# NoSQL vs SQL in TripGraph
+
+TripGraph should keep PostgreSQL as the system of record. Reviews, trips and trip legs belong in SQL because they depend on relationships and rules that must hold across multiple rows. A review refers to an existing user and place, has a rating constrained to 1--5, and is unique for each user/place pair. A trip belongs to a user, and its legs must connect in order. Foreign keys, CHECK and UNIQUE constraints, triggers, and transactions keep these rules close to the data instead of relying only on application code.
+
+SQL is also the natural home for questions that combine related data. For example, a place list joins `place` to `category`; favorites join a user, saved places and ratings; and route planning follows connected `edge` rows while applying fare, time and opening-hour conditions. PostgreSQL transactions provide ACID behaviour: a multi-step change either commits as a unit or is rolled back, and concurrent updates are coordinated by the database. Moving these core records to a document store would make cross-record validation and joins harder to keep consistent, or would require duplicating those rules in the application.
+
+A cache or document store could still help with read-heavy, derived information if the application later needs it. Examples are:
+
+- **Open-now results:** the result changes as the clock moves and opening hours change. A short-lived cache could reduce repeated reads, but its key must include the relevant time window and the cache must expire or be invalidated when opening hours change. PostgreSQL's `is_open_at()` remains the authoritative calculation.
+- **Trending places:** the list is an aggregate over recent reviews. It could be cached for a short period and refreshed periodically, while the SQL view remains the source of truth. A cached list can briefly lag behind a newly submitted review.
+- **Place documents:** a document store could serve a denormalized place page containing its category, food details, tags, opening hours and display fields. This is flexible when different place categories have different optional details, but repeated copies of relational data can become stale when a place, tag or opening hour is updated.
+
+The trade-off is not simply SQL versus NoSQL speed. SQL gives TripGraph strong consistency, foreign-key relationships, expressive joins and a well-defined schema. A document store makes nested place-shaped records and optional fields easier to evolve, and a cache can make popular reads faster, but both introduce synchronization and invalidation work. A cached or document copy should therefore be treated as a read model, not as a second authority for reviews, trips, constraints or routing decisions.
+
+**Current project scope:** TripGraph implements the database features in PostgreSQL. It does not currently implement Redis, MongoDB or another NoSQL service. This comparison describes where such a service might fit in a future version; it is not a claim that a NoSQL component has been built.

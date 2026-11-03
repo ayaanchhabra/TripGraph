@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# recovery/crash_demo.sh   (A)   OPTIONAL: automated version of the crash demo (Linux / macOS / WSL)
+# recovery/crash_demo.sh   OPTIONAL: automated version of the crash demo (Linux / macOS / WSL)
 # Usage (from the repo root):  bash recovery/crash_demo.sh
 # Uses the usual psql environment variables (PGHOST, PGPORT, PGUSER, PGDATABASE). Defaults: database tripgraph.
 # What it does: commits one row, opens a transaction with a second row that is never committed,

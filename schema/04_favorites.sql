@@ -1,4 +1,4 @@
--- schema/04_favorites.sql   (K)
+-- schema/04_favorites.sql
 -- Adds the favorite table: a many-to-many relationship between app_user and place.
 -- A student can save many places, and a place can be saved by many students.
 -- Run after 01, 02 and 03 (it needs app_user and place to exist). Safe to run more than once.

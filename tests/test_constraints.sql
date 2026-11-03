@@ -1,4 +1,4 @@
--- tests/test_constraints.sql   (K)
+-- tests/test_constraints.sql
 -- Valid and invalid data against the schema rules (CHECK, UNIQUE, FOREIGN KEY, cascades).
 -- Run from the repo root (needs schema/*.sql and triggers/*.sql loaded):
 --   psql -U postgres -d tripgraph -f tests/test_constraints.sql

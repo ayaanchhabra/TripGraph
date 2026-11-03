@@ -1,4 +1,4 @@
--- queries/views/02_open_now.sql   (K)
+-- queries/views/02_open_now.sql
 -- is_open_at(place, time): is the place open at that moment?
 -- open_now: all places open right now (Indian time).
 --

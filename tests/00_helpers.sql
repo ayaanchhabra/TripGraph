@@ -1,4 +1,4 @@
--- tests/00_helpers.sql   (K)
+-- tests/00_helpers.sql
 -- Tiny test toolkit used by the other test files (loaded with \i, inside a transaction).
 --   expect_ok(area, test, sql)               the statement must succeed
 --   expect_fail(area, test, sql, text)       the statement must FAIL with an error containing `text`

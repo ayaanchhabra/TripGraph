@@ -1,4 +1,4 @@
--- data/load_all.sql   (A)
+-- data/load_all.sql
 -- One command to load all hand-made data, in the right order.
 --
 -- Prerequisites: run these BEFORE this file, in this order:

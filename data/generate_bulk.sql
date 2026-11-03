@@ -1,4 +1,4 @@
--- data/generate_bulk.sql   (A)   PHASE 3: bulk data for indexing benchmarks
+-- data/generate_bulk.sql   PHASE 3: bulk data for indexing benchmarks
 --
 -- Builds a SEPARATE schema called "bench" with generated copies of the tables.
 -- Your real demo data in the public schema is never touched.
@@ -11,7 +11,7 @@
 -- RE-RUNNABLE: it drops and rebuilds the bench schema each time.
 --
 -- Why a separate schema instead of loading into public.place?
---   1. The avg_rating trigger (K) would fire once per generated review and make the load very slow.
+--   1. The avg_rating trigger would fire once per generated review and make the load very slow.
 --      bench tables are plain copies with NO triggers and NO foreign keys, so the load is fast.
 --      avg_rating / review_count are computed once at the end with one UPDATE (same values the trigger would give).
 --   2. The viva demo (routes, top-rated lists) stays small and readable.

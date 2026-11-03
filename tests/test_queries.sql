@@ -1,4 +1,4 @@
--- tests/test_queries.sql   (K)
+-- tests/test_queries.sql
 -- Views (top_rated_places, open_now), is_open_at() and cheapest_route().
 -- Run from the repo root (needs schema, triggers, queries/views and queries/trips loaded):
 --   psql -U postgres -d tripgraph -f tests/test_queries.sql

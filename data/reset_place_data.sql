@@ -1,4 +1,4 @@
--- data/reset_place_data.sql   (A)  DEV ONLY
+-- data/reset_place_data.sql  DEV ONLY
 -- Clears place data so load_places.sql can be re-run.
 -- Run from the repo root. Does NOT touch node/edge or category.
 -- Fails if reviews / favorites / trips still reference places; delete those first

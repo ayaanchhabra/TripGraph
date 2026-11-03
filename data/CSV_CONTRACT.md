@@ -1,6 +1,6 @@
-# Place CSV contract (A <-> AJ)
+# Place CSV contract
 
-AJ writes these three files into `data/csv/`. A's `load_places.sql` reads them.
+The place-data producer writes these three files into `data/csv/`. The place loader reads them.
 Header row required. UTF-8. Empty cell = NULL. Wrap text containing commas in "double quotes".
 
 ## places.csv
@@ -25,7 +25,7 @@ place_id,tag_name
 ## opening_hours.csv
 place_id,day,open_time,close_time
 
-- day: 1-7 (ISO: 1 = Monday ... 7 = Sunday)  [to confirm with K]
+- day: 1-7 (ISO: 1 = Monday ... 7 = Sunday)
 - time format HH:MM (24 hour). One row per place per day (7 rows per place), no duplicates.
 
 Working examples are in `data/csv_examples/`.

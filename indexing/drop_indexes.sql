@@ -1,4 +1,4 @@
--- indexing/drop_indexes.sql   (A)
+-- indexing/drop_indexes.sql
 -- Removes every index that create_indexes.sql can build, so you are back to the
 -- "no index" baseline. Safe to run any time (IF EXISTS).
 -- Run from the REPO ROOT:

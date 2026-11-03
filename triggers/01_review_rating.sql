@@ -1,4 +1,4 @@
--- triggers/01_review_rating.sql   (K)
+-- triggers/01_review_rating.sql
 -- Keeps place.avg_rating and place.review_count in sync with the review table.
 -- avg_rating is deliberately DENORMALIZED (stored on place) so "top rated" queries
 -- do not have to average every review each time. The trigger is what keeps it correct.

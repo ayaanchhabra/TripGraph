@@ -1,4 +1,4 @@
--- data/validate_places.sql   (A)
+-- data/validate_places.sql
 -- Sanity checks after load_places.sql. Run from the repo root:
 --   psql -U postgres -d tripgraph -f data/validate_places.sql
 -- "expect 0 rows" checks should be empty; "info" checks are for you to eyeball.

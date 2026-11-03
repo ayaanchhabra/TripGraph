@@ -2,7 +2,7 @@
 -- Loads the hand-built mini map into node and edge.
 -- Run from the REPO ROOT (so the relative paths work):
 --   psql -U postgres -d tripgraph -f data/map/load_map.sql
--- Requires K's schema (schema/01_tables.sql) to be loaded first.
+-- Requires the project schema (schema/01_tables.sql) to be loaded first.
 -- Nodes must load before edges because edge has foreign keys to node.
 
 BEGIN;

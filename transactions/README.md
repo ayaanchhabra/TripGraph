@@ -127,7 +127,7 @@ PostgreSQL never lets a transaction read uncommitted data (no dirty reads), so e
 
 ---
 
-# Concurrency demo: the deadlock (K)
+# Concurrency demo: the deadlock
 
 **Idea:** two transactions each hold a row lock the other one needs, so neither can ever continue.
 PostgreSQL notices the circular wait and aborts one of them.

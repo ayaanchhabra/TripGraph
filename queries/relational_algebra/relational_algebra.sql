@@ -1,9 +1,9 @@
--- queries/relational_algebra/relational_algebra.sql   (A)
+-- queries/relational_algebra/relational_algebra.sql
 -- Six relational algebra queries with their SQL equivalents, plus one tuple relational
 -- calculus (TRC) query. The algebra and explanations are in relational_algebra.md; this
 -- file is the runnable SQL. Run from the repo root:
 --   psql -U postgres -d tripgraph -f queries/relational_algebra/relational_algebra.sql
--- Table and column names are exactly those of the TABLES section (K's schema).
+-- Table and column names are exactly those of the TABLES section (the project schema).
 
 \echo '--- RA1: veg food outlets (select + join + project) ---'
 SELECT DISTINCT p.name

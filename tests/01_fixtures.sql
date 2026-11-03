@@ -1,4 +1,4 @@
--- tests/01_fixtures.sql   (K)
+-- tests/01_fixtures.sql
 -- A tiny private map and some test rows (ids start at 900001 so they never clash with real data).
 -- Everything is rolled back at the end of each test file.
 --

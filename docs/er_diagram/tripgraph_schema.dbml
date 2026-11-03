@@ -1,5 +1,5 @@
 // TripGraph relational schema (for dbdiagram.io)
-// Synced with 01_tables.sql and K's final 14-table list. CHECK/UNIQUE/FK rules live in 02_constraints.sql.
+// Synced with 01_tables.sql and the final 14-table list. CHECK/UNIQUE/FK rules live in 02_constraints.sql.
 // favorite is created in schema/04_favorites.sql; its column types below are suggestions, check against that file.
 
 Table app_user {

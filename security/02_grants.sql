@@ -130,7 +130,7 @@ GRANT SELECT ON audit_log TO tripgraph_admin WITH GRANT OPTION;
 -- ---------------------------------------------------------------------------
 
 -- ---------------------------------------------------------------------------
--- 5. The rating trigger must run with the TABLE OWNER's rights.
+-- 5. The rating trigger must run with the table-owning role's privileges.
 --    When a student inserts a review, the trigger updates place.avg_rating. A student has no UPDATE
 --    right on place, so without this the insert would fail with "permission denied for table place".
 --    SECURITY DEFINER makes the function run as the role that owns it. SET search_path pins which

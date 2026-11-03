@@ -1,4 +1,4 @@
--- transactions/lost_update_fix.sql   (K)
+-- transactions/lost_update_fix.sql
 -- Step 2 of the concurrency demo: put back the CORRECT version (locks the place row first).
 -- Run from the repo root:
 --   psql -U postgres -d tripgraph -f transactions/lost_update_fix.sql

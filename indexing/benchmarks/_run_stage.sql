@@ -1,4 +1,4 @@
--- indexing/benchmarks/_run_stage.sql   (A)   helper, called by run_benchmarks.sql
+-- indexing/benchmarks/_run_stage.sql   helper, called by run_benchmarks.sql
 -- Expects psql variables:  :stage (label)  :mode (none | btree | hash | all)  :runs
 -- 1) set the index state  2) time every query :runs times  3) save the readable plans to a file
 

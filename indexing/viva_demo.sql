@@ -1,4 +1,4 @@
--- indexing/viva_demo.sql   (A)
+-- indexing/viva_demo.sql
 -- Short live demo for the viva (step 3 of the demo plan): same query, with and without an index.
 -- Needs bench data (data/generate_bulk.sql). Run from the REPO ROOT:
 --   psql -U postgres -d tripgraph -f indexing/viva_demo.sql

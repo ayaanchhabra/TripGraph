@@ -1,4 +1,4 @@
-# Viva Q&A for A's part (AJ: paste into docs/viva_qa.md)
+# Viva Q&A: indexing and search
 
 **Q: What did you build?** The map (nodes/edges), the place loader, 100k generated rows, the index benchmarks, full-text search, relational algebra, and a recovery demo.
 **Q: Why a separate `bench` schema?** The avg_rating trigger would fire per generated review and slow the load; bench tables are plain copies with no triggers/FKs/indexes, so we get a clean "no index" baseline and the demo data stays small.

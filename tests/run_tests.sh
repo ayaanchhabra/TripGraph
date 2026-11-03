@@ -12,6 +12,7 @@ TESTS=(
   tests/test_constraints.sql
   tests/test_triggers.sql
   tests/test_queries.sql
+  tests/test_trending.sql
   tests/test_audit.sql
   tests/test_similar_places.sql
   tests/test_cheapest_edges.sql

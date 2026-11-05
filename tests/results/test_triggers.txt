@@ -13,38 +13,4 @@ INSERT 0 1
 INSERT 0 1
 INSERT 0 3
 INSERT 0 1
- #  |       area       |                                        test                                        | status 
-----+------------------+------------------------------------------------------------------------------------+--------
-  1 | Rating trigger   | new place starts at 0 stars, 0 reviews                                             | PASS
-  2 | Rating trigger   | one 5-star review gives 5.00 / 1                                                   | PASS
-  3 | Rating trigger   | adding a 2-star review gives 3.50 / 2                                              | PASS
-  4 | Rating trigger   | editing a review (2 to 4 stars) gives 4.50 / 2                                     | PASS
-  5 | Rating trigger   | third review (3 stars) gives 4.00 / 3                                              | PASS
-  6 | Rating trigger   | deleting a review gives 4.50 / 2 again                                             | PASS
-  7 | Rating trigger   | moving a review: old place updated (5.00 / 1)                                      | PASS
-  8 | Rating trigger   | moving a review: new place updated (4.00 / 1)                                      | PASS
-  9 | Rating trigger   | deleting every review resets place 1 to 0.00 / 0                                   | PASS
- 10 | Rating trigger   | deleting every review resets place 2 to 0.00 / 0                                   | PASS
- 11 | Rating trigger   | invalid rating is still rejected                                                   | PASS
- 12 | Rating trigger   | a rejected review does not change the counts                                       | PASS
- 13 | Rating trigger   | deleting a place that has reviews works (cascade)                                  | PASS
- 14 | Trip-leg trigger | leg 1 can start anywhere (Gate -> Stand)                                           | PASS
- 15 | Trip-leg trigger | leg 2 that starts where leg 1 ended is accepted (Stand -> Cafe)                    | PASS
- 16 | Trip-leg trigger | leg 3 that starts somewhere else is rejected (Gate -> Cafe after arriving at Cafe) | PASS
- 17 | Trip-leg trigger | leg 3 that continues from the Cafe is accepted (Cafe -> Gate)                      | PASS
- 18 | Trip-leg trigger | skipping a leg number is rejected (leg 5 with no leg 4)                            | PASS
- 19 | Trip-leg trigger | editing leg 2 so it no longer follows leg 1 is rejected                            | PASS
- 20 | Trip-leg trigger | editing leg 1 so leg 2 no longer follows it is rejected                            | PASS
- 21 | Trip-leg trigger | the rejected edits left the trip unchanged (3 legs)                                | PASS
-(21 rows)
-
- passed | failed 
---------+--------
-     21 |      0
-(1 row)
-
- # | test | what went wrong 
----+------+-----------------
-(0 rows)
-
-ROLLBACK
+psql:tests/test_triggers.sql:11: error: /dev/null: No such file or directory

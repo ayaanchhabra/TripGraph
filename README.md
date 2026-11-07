@@ -1,295 +1,794 @@
-# AI-Driven Multi-Vendor Network Security Compliance Auditor
+# TripGraph
 
-![Home Page](assets/screenshots/home.png)
+### Student-Oriented Place Discovery and Route Planning System
 
-## 1. Project Information
+**TripGraph** is a Database Management Systems (DBMS) project designed to organize useful places around the NSUT/Dwarka area and support route planning between them.
 
-- **Project Title:** AI-Driven Multi-Vendor Network Security Compliance Auditor
-- **PS ID:** 26155
-- **PS Title:** AI-Driven Multi-Vendor Network Security Compliance Auditor
-- **Category:** Software
-- **Theme:** Blockchain & Cybersecurity
-- **Team Name:** Segmentation Fault
+The project focuses on building a structured relational database that manages places, categories, student discounts, reviews, ratings, opening hours, favorites, transport routes and user trips.
 
-| Resource | Link |
+PostgreSQL is used as the primary database management system, with SQL and Python used for database operations, testing and demonstrations.
+
+> **Project Status: In Progress**
+>
+> The database design and a substantial part of the database implementation are available. However, the complete application is not yet finished. The frontend, backend API integration, real-world data validation and live route integration are among the remaining development areas.
+
+---
+
+# 1. Project Information
+
+| Detail | Information |
 |---|---|
-| GitHub Repository | [kanishkwaliid-prog/SIH-2026](https://github.com/kanishkwaliid-prog/SIH-2026) |
-| Demo Video | [Watch on YouTube](https://www.youtube.com/watch?v=amNHwsLx78g) |
-| Presentation (PPT) | [Google Drive](https://drive.google.com/drive/folders/1oOA9zceZgk9ZKvUtSgLsa_jGkEyHQTX8?usp=sharing) |
-| Architecture Document | [Google Drive](https://drive.google.com/drive/folders/1SJUBmso8XW0OwtMuxsepUmIMRxHzHp3Q?usp=sharing) |
+| Project Name | TripGraph |
+| Project Type | Database Management Systems Project |
+| Institution | Netaji Subhas University of Technology (NSUT) |
+| Subject | Database Management Systems (DBMS) |
+| Faculty Guide | Mr. Anand Gupta |
+| Team Members | Ayaan Chhabra, Kanishk Goswami, Anjali Kethan, Suhani Malhotra |
+| Primary Database | PostgreSQL |
+| Python Version Used | 3.13 |
+| Current Status | In Progress |
 
-## 2. Problem Statement
+**GitHub Repository:** [github.com/ayaanchhabra/TripGraph](https://github.com/ayaanchhabra/TripGraph)
 
-Modern enterprise networks run hardware from dozens of vendors, each with
-its own proprietary CLI syntax. Organizations must align these devices
-with security frameworks like CIS, NIST SP 800-53, and DISA STIGs, but
-today this is either done manually (slow, error-prone) or with
-expensive, vendor-locked tools that can't adapt to new or unfamiliar
-device types. As networks adopt new/white-box hardware, traditional
-hardcoded parsers fail outright, since they can't interpret
-configuration structures they were never built to recognize.
+---
 
-## 3. Proposed Solution
+# 2. Problem Statement
 
-An AI-augmented, vendor-agnostic compliance engine. Configuration files
-are normalized into a standard, vendor-neutral schema regardless of
-source vendor. Ten vendors are supported directly: Cisco, Juniper, and
-Palo Alto are fully parsed; Fortinet, Arista, Huawei, MikroTik, Check
-Point, Netgate pfSense, and SONiC are experimentally supported. For any
-other vendor, or any line a parser doesn't recognize, a locally-trained
-classifier makes a first-pass guess, and only when it's unsure does the
-system escalate to an LLM (with sensitive values redacted first). Any
-classification below full confidence goes through a staged human-review
-process before it is trusted, and every promotion is recorded in a
-tamper-evident audit log. The resolved configuration is checked against
-one or more security frameworks and compiled into a report with
-severity-rated findings and vendor-specific CLI remediation. Access is
-organization-scoped, with 2FA and role-based permissions.
+Students frequently need to find affordable and useful places around their college, such as food outlets, stationery shops, grocery stores, medical stores, libraries and other essential services.
 
-## 4. Key Features
+However, information about these places is often scattered across different sources. Students may also find it difficult to compare prices, check student discounts, view opening hours, read reviews and determine convenient routes.
 
-- **Vendor-agnostic ingestion** — auto-detects vendor from config
-  structure (with human override); bulk upload across 10
-  directly-supported vendors
-- **Local ML pre-classifier** — classifies unrecognized lines on-device
-  before any cloud LLM call is made
-- **AI-assisted learning loop** — LLM suggestions are verified through
-  weighted human consensus before being trusted
-- **Privacy-conscious LLM use** — IPs, passwords, and community strings
-  are redacted before any config text leaves the machine
-- **Multi-framework compliance** — CIS, NIST, STIG, RBI, SEBI, and
-  ISO 27001, with a picker to choose which to evaluate against
-- **Multi-format reporting** — Simple and Technical views with
-  vendor-specific remediation, exportable as PDF, JSON, CSV, or Markdown
-- **Secure multi-tenant accounts** — TOTP-based 2FA with backup codes
-  and role-based access, scoped per organization
-- **Tamper-evident audit trails** — hash-chained logs for training
-  decisions and user activity, verifiable via `GET /audit`
+TripGraph aims to organize this information in a single database and provide a foundation for place discovery and route planning.
 
-## 5. Technology Stack
+The system is intended to help students explore nearby places based on their requirements, compare available options and plan routes using stored transport information.
 
-- **Backend:** Python, FastAPI
-- **AI/LLM:** Groq API (`openai/gpt-oss-120b`)
-- **Storage:** SQLite
-- **Auth:** PyJWT, argon2-cffi, PyOTP + qrcode
-- **Local classifier:** scikit-learn + joblib
-- **Rule packs:** PyYAML
-- **Report generation:** Jinja2 + WeasyPrint (PDF)
-- **Frontend:** HTML, CSS, vanilla JavaScript
+---
 
-## 6. Architecture
+# 3. Proposed Solution
 
-Full breakdown: [Architecture Document](https://drive.google.com/drive/folders/1SJUBmso8XW0OwtMuxsepUmIMRxHzHp3Q?usp=sharing)
+TripGraph uses a relational database to connect information about places, users, categories, reviews, tags, opening hours, transport locations and trips.
 
-![Architecture Diagram](assets/screenshots/architecture.png)
+The database is designed around the following operations:
 
+- Storing and organizing places based on categories.
+- Maintaining ratings and reviews submitted by users.
+- Identifying affordable places and available student discounts.
+- Managing saved places and visited-place history.
+- Checking whether a place is open at a particular time.
+- Representing a transport network using nodes and edges.
+- Calculating suitable routes based on fare, travel time and other constraints.
+- Maintaining trip information and ordered route segments.
+
+The current implementation focuses on the database layer and its validation through SQL and Python demonstrations.
+
+---
+
+# 4. Key Features
+
+## 4.1 Place Management
+
+Stores information about places, including:
+
+- Place name and address.
+- Geographical coordinates (latitude and longitude).
+- Category and price level.
+- Student discount availability.
+- Associated location node.
+
+## 4.2 Categories and Tags
+
+Places are organized into categories such as food and drink, study and work, essentials, technology and repair, shopping and lifestyle, and hangouts.
+
+Tags provide an additional way to classify places. A place can have multiple tags, and the same tag can be associated with multiple places.
+
+## 4.3 Reviews and Ratings
+
+Users can submit ratings and reviews for places.
+
+Database triggers automatically maintain the average rating and total review count whenever a review is inserted, updated or deleted.
+
+## 4.4 Favorites and Visited History
+
+Users can save places as favorites and mark them as visited. The database also supports queries for listing favorites and identifying frequently saved places.
+
+## 4.5 Opening Hours
+
+The database stores day-wise opening and closing times. It also supports checking whether a place is currently open or will be open at a specified arrival time.
+
+## 4.6 Route Planning
+
+The transport network is represented through:
+
+- **Nodes:** Locations such as college gates, metro stops, bus stops and place clusters.
+- **Edges:** Directed connections between nodes containing transport mode, distance, estimated travel time and fare.
+
+A recursive SQL query calculates routes based on fare or travel time, subject to constraints such as maximum fare, maximum number of legs and arrival deadline.
+
+## 4.7 Similar Place Suggestions
+
+The database includes a function that suggests places belonging to the same category and having a similar price level. Results are ranked using price difference, ratings and review counts.
+
+## 4.8 Database Security and Audit Logging
+
+Separate PostgreSQL roles are defined for student and administrator operations.
+
+An audit trigger records important insert, update and delete operations on places and transport edges.
+
+---
+
+# 5. Database Design
+
+The main TripGraph database contains **14 relational tables**.
+
+| Table | Purpose |
+|---|---|
+| `app_user` | Stores user information and roles. |
+| `category` | Stores categories of places. |
+| `place` | Stores information about different places. |
+| `food_outlet` | Stores additional information about food outlets. |
+| `tag` | Stores available tags. |
+| `place_tag` | Connects places with tags. |
+| `opening_hours` | Stores opening and closing times for each day. |
+| `review` | Stores ratings and reviews submitted by users. |
+| `favorite` | Stores saved and visited places. |
+| `node` | Represents locations in the transport network. |
+| `edge` | Represents connections between transport nodes. |
+| `trip` | Stores trips created by users. |
+| `trip_leg` | Stores the ordered route segments of a trip. |
+| `audit_log` | Records important database operations. |
+
+## 5.1 Database Integrity
+
+The database uses:
+
+- Primary keys and composite primary keys.
+- Foreign key constraints.
+- UNIQUE constraints.
+- CHECK constraints.
+- Referential integrity.
+- Database triggers for automatic updates and validation.
+
+## 5.2 ER Diagram
+
+The ER diagram represents the entities, attributes, relationships and cardinalities used in TripGraph.
+
+![TripGraph ER Diagram](docs/er_diagram/tripgraph_er.png)
+
+---
+
+# 6. Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| PostgreSQL | Primary relational database |
+| SQL | Database schema, queries and operations |
+| PL/pgSQL | Database functions and triggers |
+| Python 3.13 | Database testing and concurrency demonstration |
+| psycopg2-binary | Python-to-PostgreSQL connectivity |
+| XAMPP / phpMyAdmin | Viewing the MySQL-compatible schema and Designer diagram |
+| PyCharm | Python development and execution |
+| Git and GitHub | Version control and project collaboration |
+
+**Database implementation note:** PostgreSQL is the actual database engine used for the main implementation. The file `docs/er_diagram/xampp_er_diagram.sql` is a MySQL/MariaDB-compatible schema copy prepared for viewing the table structure and relationships through phpMyAdmin Designer. It is not the main executable PostgreSQL database.
+
+---
+
+# 7. Project Architecture
+
+The current implementation follows a database-first structure.
+
+```text
+             Project Data
+                  |
+                  v
+        CSV Files and Sample Data
+                  |
+                  v
+            PostgreSQL
+                  |
+          +-------+-------+
+          |       |       |
+          v       v       v
+        Tables  Triggers  Constraints
+          |       |       |
+          +-------+-------+
+                  |
+                  v
+       SQL Queries and Functions
+                  |
+          +-------+-------+
+          |       |       |
+          v       v       v
+        Views   Routes  Recommendations
+                  |
+                  v
+         Python Database Testing
+                  |
+                  v
+        Validation and Test Results
 ```
-User uploads config(s)
-        |
-        v
-Sign-in (email + password, optional TOTP 2FA)
-        |
-        v
-Frontend (upload -> vendor confirm -> unknown-line review -> report)
-        |
-        v
-Backend API (FastAPI)
-        |
-        v
-Vendor detection + parsers
-        |
-        v
-Local ML classifier --> LLM fallback (redacted) --> human review
-        |
-        v
-Normalized JSON config
-        |
-        v
-Compliance engine (CIS / NIST / STIG / RBI / SEBI / ISO 27001)
-        |
-        v
-Report (PDF / JSON / CSV / Markdown)
-```
 
-## 7. Repository Structure
+The planned application layer will connect the database to a user-facing frontend and backend. This integration is not yet complete.
 
-```
-SIH-2026/
+---
+
+# 8. Repository Structure
+
+```text
+TripGraph/
+│
 ├── README.md
-├── requirements.txt
-├── .env.example
-├── assets/
-│   └── screenshots/
-├── dev-notes/                    Build log and design notes
-├── submission/                   Presentation and demo notes
-└── src/
-    ├── frontend/                   Static HTML/CSS/JS, calls the backend API directly
-    │   ├── shared.js                 API calls, session handling, routing
-    │   ├── auth/                     Sign-in / organization signup
-    │   ├── account/security/         2FA setup and backup codes
-    │   ├── admin/                    Team management, activity log viewer
-    │   ├── upload_configuration/
-    │   ├── analyzing_configuration/
-    │   ├── vendor_detection_result/
-    │   ├── review_unknown_lines/
-    │   ├── compliance_report_dashboard/
-    │   ├── rulesets/
-    │   └── legal/                    Privacy, Terms, Help
-    │
-    └── backend/
-        ├── api.py                    FastAPI app, wires everything into HTTP endpoints
-        ├── pipeline.py               Detection -> parsing -> classifier -> LLM fallback
-        ├── activity_log.py           Hash-chained user activity log
-        ├── main.py                   Standalone CLI test script
-        │
-        ├── auth/                     Accounts, 2FA, role-based access
-        │   ├── routes.py               Signup/login, 2FA enrollment
-        │   ├── admin_routes.py         Team and role management
-        │   ├── deps.py                 Permission checks on endpoints
-        │   ├── store.py                Account / organization storage
-        │   ├── security.py             Password hashing
-        │   ├── lockout.py              Login lockout
-        │   ├── totp.py                 TOTP logic
-        │   └── config.py               JWT secret loading
-        │
-        ├── converter/                Vendor detection + parsers
-        │   ├── detection.py            Vendor signature detection
-        │   ├── block2a_main.py         Entry point
-        │   └── parsers/                One parser per vendor (10 vendors)
-        │
-        ├── block2b/                  Local classifier, LLM fallback, memory, review
-        │   ├── prefilter.py            Local classifier (tried before any cloud call)
-        │   ├── rules_prefilter.py      Rule-based pre-filter
-        │   ├── train_prefilter.py      Classifier training script
-        │   ├── llm_classifier.py       Groq-based classification
-        │   ├── redaction.py            Sensitive-value redaction
-        │   ├── memory.py               Confirmed-line cache
-        │   └── review_system.py        Staged human review + audit log
-        │
-        ├── compliance_engine/        Compliance evaluation
-        │   ├── evaluator.py            Rule evaluation logic
-        │   ├── audit_log.py            Scan audit log
-        │   └── rules/                  CIS, NIST, STIG, RBI, SEBI, ISO 27001 (YAML)
-        │
-        ├── report_generator/
-        │   └── report_gen.py         PDF / JSON / CSV / Markdown reports
-        └── shared/
-            └── schema.py             Common vendor-neutral schema
+│
+├── app/
+│   ├── backend/
+│   └── frontend/
+│
+├── data/
+│   ├── csv/
+│   ├── csv_examples/
+│   ├── map/
+│   ├── sample_data/
+│   ├── load_all.sql
+│   ├── load_places.sql
+│   └── CSV_CONTRACT.md
+│
+├── docs/
+│   ├── er_diagram/
+│   │   ├── tripgraph_er.png
+│   │   ├── tripgraph_er.drawio
+│   │   ├── tripgraph_schema.png
+│   │   ├── tripgraph_schema.dbml
+│   │   ├── xampp_designer_diagram.png
+│   │   └── xampp_er_diagram.sql
+│   ├── presentation/
+│   ├── report/
+│   ├── viva_demo.md
+│   └── nosql_vs_sql.md
+│
+├── indexing/
+│   ├── benchmarks/
+│   ├── fulltext_search.sql
+│   ├── public_indexes.sql
+│   └── viva_demo.sql
+│
+├── normalization/
+│   ├── README.md
+│   ├── functional_dependencies.md
+│   ├── decomposition_steps.md
+│   ├── messy_table.sql
+│   └── normalized_tables.sql
+│
+├── queries/
+│   ├── procedures/
+│   ├── relational_algebra/
+│   ├── trips/
+│   └── views/
+│
+├── recovery/
+│   ├── README.md
+│   ├── 01_setup.sql
+│   ├── 02_uncommitted_then_wait.sql
+│   └── 03_verify.sql
+│
+├── schema/
+│   ├── 01_tables.sql
+│   ├── 02_constraints.sql
+│   ├── 03_seed_reference.sql
+│   └── 04_favorites.sql
+│
+├── scripts/
+│   └── setup_db.sh
+│
+├── security/
+│   ├── 01_roles.sql
+│   ├── 02_grants.sql
+│   └── 03_test_roles.sql
+│
+├── tests/
+│   ├── run_tests.sh
+│   ├── test_constraints.sql
+│   ├── test_triggers.sql
+│   ├── test_queries.sql
+│   ├── test_trending.sql
+│   ├── test_audit.sql
+│   ├── test_similar_places.sql
+│   ├── test_cheapest_edges.sql
+│   └── test_freshers_guide.sql
+│
+├── transactions/
+│   ├── README.md
+│   ├── concurrent_reviews.py
+│   ├── lost_update_demo.sql
+│   ├── lost_update_fix.sql
+│   ├── deadlock_demo.sql
+│   └── deadlock_demo.sh
+│
+├── triggers/
+│   ├── 01_review_rating.sql
+│   ├── 02_trip_leg_continuity.sql
+│   └── 03_audit_log.sql
+│
+└── user_features/
+    └── favorites.sql
 ```
 
-## 8. Final Presentation
+### Important Directories
 
-[View the presentation (Google Drive)](https://drive.google.com/drive/folders/1oOA9zceZgk9ZKvUtSgLsa_jGkEyHQTX8?usp=sharing)
+| Directory | Description |
+|---|---|
+| `schema/` | Main relational database tables, constraints and reference data. |
+| `data/` | CSV files, sample data and database loading scripts. |
+| `queries/` | SQL views, route calculations and stored functions. |
+| `triggers/` | Automatic database updates, validation and audit logging. |
+| `security/` | PostgreSQL roles, permissions and role testing. |
+| `tests/` | SQL test suite. |
+| `transactions/` | Lost-update, deadlock and concurrent transaction demonstrations. |
+| `normalization/` | Functional dependencies, candidate keys and BCNF decomposition. |
+| `indexing/` | Indexing, full-text search and query performance benchmarks. |
+| `recovery/` | Transaction recovery demonstrations. |
 
-## 9. Demo Video
+---
 
-[Watch the demo on YouTube](https://www.youtube.com/watch?v=amNHwsLx78g)
+# 9. Installation and Setup
 
-## 10. Screenshots / Prototype Photos
+## 9.1 Prerequisites
 
-**Upload Configuration**
+Install the following:
 
-![Upload Configuration](assets/screenshots/home.png)
+1. PostgreSQL 15 or later (the project has been tested with PostgreSQL 16).
+2. Git.
+3. Git Bash on Windows, or Bash on Linux/macOS.
+4. Python 3.13 (required for the Python concurrency demonstration).
 
-**Compliance Report Dashboard** (click to watch the demo)
+Python is not required to create the database or run the SQL test suite.
 
-[![Demo Video](assets/screenshots/demo-thumbnail.png)](https://www.youtube.com/watch?v=amNHwsLx78g)
-
-## 11. Installation
+## 9.2 Clone the Repository
 
 ```bash
-git clone https://github.com/kanishkwaliid-prog/SIH-2026.git
-cd SIH-2026
+git clone https://github.com/ayaanchhabra/TripGraph.git
+
+cd TripGraph
 ```
 
-**macOS / Linux**
+## 9.3 Configure PostgreSQL
 
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env          # then fill in GROQ_API_KEY, JWT_SECRET, DEMO_PASSWORD
-```
+Make sure the PostgreSQL service is running.
 
-**Windows (PowerShell)**
+The setup script requires a PostgreSQL user with permission to create databases and roles. A local PostgreSQL superuser such as `postgres` can be used for the classroom setup.
+
+### Windows PowerShell
+
+The following example assumes PostgreSQL 16 and the default Git installation directory.
 
 ```powershell
-python -m venv venv
-venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-copy .env.example .env        # then fill in GROQ_API_KEY, JWT_SECRET, DEMO_PASSWORD
+$env:Path = "C:\Program Files\PostgreSQL\16\bin;$env:Path"
+
+$env:PGHOST = "localhost"
+$env:PGPORT = "5432"
+$env:PGUSER = "postgres"
 ```
 
-> If PowerShell blocks activation, run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` once, or use Command Prompt (`venv\Scripts\activate.bat`).
+For password authentication, use PostgreSQL's password prompt or configure a local password file using `PGPASSFILE`.
 
-Generate a `JWT_SECRET` (use `python3` on macOS/Linux). The backend refuses to start without one:
-
-```bash
-python -c "import secrets; print(secrets.token_urlsafe(48))"
-```
-
-**PDF generation (WeasyPrint)** needs system libraries:
-
-```bash
-brew install pango cairo gdk-pixbuf libffi     # macOS
-```
-
-On Windows, install the [GTK3 runtime](https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#windows) and restart the terminal. JSON/CSV/Markdown export works without it.
-
-## 12. Run
-
-Two terminals, run at the same time.
-
-**macOS / Linux**
-
-```bash
-# Terminal 1 -- backend
-source venv/bin/activate
-cd src/backend
-uvicorn api:app --reload --port 8000
-```
-
-```bash
-# Terminal 2 -- frontend
-cd src/frontend
-python3 -m http.server 5500
-```
-
-**Windows (PowerShell)**
+Example:
 
 ```powershell
-# Terminal 1 -- backend
-venv\Scripts\Activate.ps1
-cd src\backend
-uvicorn api:app --reload --port 8000
+$env:PGPASSFILE = "$env:APPDATA\postgresql\pgpass.conf"
 ```
+
+The password file must contain the appropriate connection entry and should remain outside the repository. Never commit database passwords.
+
+### Linux / macOS
+
+```bash
+export PGHOST=localhost
+export PGPORT=5432
+export PGUSER=postgres
+```
+
+Configure PostgreSQL authentication using your local PostgreSQL installation.
+
+## 9.4 Create the Python Environment
+
+This step is required only for the Python concurrency demonstration.
+
+### Windows
 
 ```powershell
-# Terminal 2 -- frontend
-cd src\frontend
-python -m http.server 5500
+py -3.13 -m venv .venv
+
+.\.venv\Scripts\Activate.ps1
+
+python -m pip install --upgrade pip
+
+python -m pip install psycopg2-binary
 ```
 
-Open `http://localhost:5500/upload_configuration/` in your browser. You'll be
-sent to the sign-in page first.
+### Linux / macOS
 
-**Demo accounts** (created at startup when `DEMO_PASSWORD` is set, all using that password): `admin@`, `senior@`, `engineer@` and `viewer@` at `alpha.demo` and `beta.demo` -- e.g. `engineer@alpha.demo`. Or create a new organization from the sign-in page.
+```bash
+python3 -m venv .venv
 
-**Tests:** `cd src/backend` then `pytest auth/ -q`
+source .venv/bin/activate
 
-## 13. Future Scope
+python -m pip install --upgrade pip
 
-- **Live device polling** — pull configs directly from devices over SSH
-  instead of relying on uploaded files
-- **Local/on-prem LLM option** — for organizations that can't send any
-  config data to a third-party API, even redacted
-- **Broader parser coverage** — deeper support for the 7 experimental
-  vendors
-- **Tighter CORS and a relative API base** — currently permissive/
-  hardcoded for local development
+python -m pip install psycopg2-binary
+```
 
-## Important
+## 9.5 Create and Initialize the Database
 
-Do not commit `.env`, API keys, or any other credentials. `.env` is
-already excluded via `.gitignore`; if a key is ever accidentally
-committed, revoke and rotate it immediately.
+Run the setup script from the repository root.
+
+### Windows PowerShell with Git Bash
+
+```powershell
+& "C:\Program Files\Git\bin\bash.exe" scripts/setup_db.sh tripgraph postgres
+```
+
+### Linux / macOS
+
+```bash
+bash scripts/setup_db.sh tripgraph postgres
+```
+
+The setup script automatically:
+
+1. Creates the PostgreSQL database.
+2. Creates the required database roles.
+3. Creates all relational tables.
+4. Applies primary key, foreign key, UNIQUE and CHECK constraints.
+5. Loads reference and sample data.
+6. Installs database triggers.
+7. Creates the configured views and functions.
+8. Loads indexing and security scripts included in the setup sequence.
+9. Runs the SQL test suite.
+
+A successful setup displays:
+
+```text
+Database tripgraph is ready. Running all tests ...
+
+==============================
+ALL TESTS PASSED (failed = 0)
+```
+
+**Important:** The setup script refuses to overwrite an existing database.
+
+The `--reset` option drops and rebuilds the specified database. Use it only when you intentionally want to delete and recreate a disposable database.
+
+Example:
+
+```bash
+bash scripts/setup_db.sh tripgraph postgres --reset
+```
+
+Do not use this option on a database containing data you want to preserve.
+
+---
+
+# 10. Running Database Tests
+
+After the database has been created, the test suite can be executed separately.
+
+### Windows
+
+```powershell
+& "C:\Program Files\Git\bin\bash.exe" tests/run_tests.sh tripgraph postgres
+```
+
+### Linux / macOS
+
+```bash
+bash tests/run_tests.sh tripgraph postgres
+```
+
+The test suite checks:
+
+- Database constraints and relational integrity.
+- Review rating triggers.
+- Trip and route queries.
+- Trending-place calculations.
+- Audit logging.
+- Similar-place suggestions.
+- Cheapest-edge queries.
+- Freshers' guide queries.
+
+Test outputs are stored in:
+
+```text
+tests/results/
+```
+
+A successful execution displays:
+
+```text
+ALL TESTS PASSED (failed = 0)
+```
+
+---
+
+# 11. Important SQL Operations
+
+The project contains several SQL queries and functions for demonstrating database operations.
+
+| Operation | File |
+|---|---|
+| Top-rated places | `queries/views/01_top_rated_places.sql` |
+| Currently open places | `queries/views/02_open_now.sql` |
+| Trending places | `queries/views/03_trending_this_month.sql` |
+| Cheapest route | `queries/trips/01_cheapest_route.sql` |
+| Similar-place suggestions | `queries/procedures/01_similar_places.sql` |
+| Favorite and visited-place operations | `user_features/favorites.sql` |
+| Full-text search | `indexing/fulltext_search.sql` |
+
+### Example Queries
+
+```sql
+-- View top-rated places
+SELECT * FROM top_rated_places;
+
+-- View places currently open
+SELECT * FROM open_now;
+
+-- Find similar places
+SELECT * FROM similar_places(1);
+
+-- Calculate a route to a place
+SELECT * FROM cheapest_route(1);
+
+-- View trending places
+SELECT * FROM trending_this_month;
+```
+
+### Optional Full-Text Search Setup
+
+The full-text search module is available separately and is not included in the default database setup sequence.
+
+To install it:
+
+```bash
+psql -U postgres -d tripgraph -v ON_ERROR_STOP=1 -f indexing/fulltext_search.sql
+```
+
+Then refresh the database grants:
+
+```bash
+psql -U postgres -d tripgraph -v ON_ERROR_STOP=1 -f security/02_grants.sql
+```
+
+Example:
+
+```sql
+SELECT * FROM search_places('veg cafe wifi');
+
+SELECT * FROM places_with_tags(ARRAY['veg', 'wifi']);
+```
+
+---
+
+# 12. Python Concurrent Review Demonstration
+
+The project includes a Python script that tests how the database handles multiple users submitting reviews for the same place simultaneously.
+
+**Script:** `transactions/concurrent_reviews.py`
+
+The script uses Python threads and PostgreSQL connections through `psycopg2`.
+
+### Run the Demonstration
+
+```bash
+python transactions/concurrent_reviews.py \
+  --dsn "host=localhost port=5432 dbname=tripgraph user=postgres" \
+  --place-id 1 \
+  --reviews 20 \
+  --isolation "read committed"
+```
+
+The script performs the following operations:
+
+1. Creates temporary reviewer accounts.
+2. Starts multiple reviewers using a thread barrier.
+3. Inserts reviews for the same place concurrently.
+4. Calculates the actual review count and average rating.
+5. Compares them with the values stored in the `place` table by the trigger.
+6. Displays whether the stored values match.
+7. Deletes the temporary reviewer accounts and their associated reviews.
+
+### Example Successful Output
+
+```text
+Starting 20 reviewers at the same moment ...
+
+Real reviews in the review table:
+count=26, avg=3.12
+
+Stored on the place row (trigger):
+count=26, avg=3.12
+
+RESULT: CORRECT.
+The stored numbers match the real reviews.
+```
+
+The exact values depend on the current database records.
+
+**Safety note:** The script clears its reserved temporary user ID range before creating test users. Run it only against a local demonstration database, not a production database.
+
+---
+
+# 13. Normalization and Database Design
+
+The project also includes a separate normalization demonstration.
+
+The `normalization/` directory contains:
+
+- A deliberately denormalized table.
+- Examples of insertion, update and deletion anomalies.
+- Functional dependencies and attribute closures.
+- Candidate keys and minimal cover.
+- Decomposition from 1NF to BCNF.
+- Lossless-join proof using the chase method.
+- Dependency-preservation analysis.
+- Final normalized demonstration tables.
+
+### Run the Normalization Demonstration
+
+```bash
+psql -U postgres -d tripgraph -v ON_ERROR_STOP=1 -f normalization/messy_table.sql
+
+psql -U postgres -d tripgraph -v ON_ERROR_STOP=1 -f normalization/normalized_tables.sql
+```
+
+The normalized demonstration uses a separate `norm_demo` schema and does not replace the main TripGraph database tables.
+
+For detailed instructions, see:
+
+`normalization/README.md`
+
+---
+
+# 14. Indexing and Query Optimization
+
+The project includes indexing demonstrations to study how indexes influence query execution.
+
+The repository covers:
+
+- B-tree indexes.
+- Hash indexes.
+- GIN indexes.
+- Composite indexes.
+- Partial indexes.
+- Full-text search.
+- Query-plan analysis using `EXPLAIN ANALYZE`.
+
+The `indexing/benchmarks/` directory contains benchmark queries, scripts and recorded execution plans.
+
+A separate `bench` schema is used for large generated datasets so that benchmark data does not interfere with the main demonstration data.
+
+The query plans and execution times depend on the database size, PostgreSQL configuration and system hardware.
+
+---
+
+# 15. Transactions, Concurrency and Recovery
+
+The repository contains demonstrations of important transaction-management concepts.
+
+### Lost Update
+
+Files:
+
+- `transactions/lost_update_demo.sql`
+- `transactions/lost_update_fix.sql`
+
+These scripts demonstrate the lost-update problem and its correction using row-level locking.
+
+The actual review-rating trigger uses `FOR NO KEY UPDATE` to serialize rating recalculations for the same place.
+
+### Deadlock Demonstration
+
+Files:
+
+- `transactions/deadlock_demo.sql`
+- `transactions/deadlock_demo.sh`
+
+These demonstrate how transactions can enter a circular wait and how consistent row-locking order helps prevent deadlocks.
+
+### Recovery Demonstration
+
+The `recovery/` directory contains SQL scripts for demonstrating transaction commit, uncommitted work and rollback after backend termination.
+
+These exercises are intended for a local demonstration environment.
+
+---
+
+# 16. Current Project Status and Incomplete Areas
+
+TripGraph is an ongoing project. The database layer has been developed substantially, but the complete application is still under development.
+
+The following table describes the current implementation status.
+
+| Component | Status | Details |
+|---|---|---|
+| ER Model and Relational Schema | Implemented | ER diagram and 14 relational tables are present. |
+| Database Constraints | Implemented | Primary keys, foreign keys, UNIQUE and CHECK constraints. |
+| Database Triggers | Implemented | Review rating updates, trip-leg continuity and audit logging. |
+| SQL Queries and Views | Implemented | Route calculation, open places, top-rated places and similar-place suggestions. |
+| Database Security | Partially Implemented | PostgreSQL roles and grants exist; application-level user authentication and ownership enforcement are pending. |
+| Normalization | Implemented | Functional dependencies, candidate keys and BCNF demonstration are available. |
+| Indexing | Implemented | Index definitions, full-text search and benchmark scripts are available. |
+| Transaction Testing | Implemented | Lost-update, concurrency and deadlock demonstrations are available. |
+| Frontend | Not Yet Implemented | The `app/frontend/` directory currently contains only a placeholder. |
+| Backend API | Not Yet Implemented | The `app/backend/` directory currently contains only a placeholder. |
+| Live Map Integration | Not Yet Implemented | No external mapping or real-time navigation service is connected. |
+| Production Data Integration | In Progress | Current map data is a small demonstration dataset and requires real-world verification and expansion. |
+| Complete Application Deployment | Pending | The database has been tested locally, but a complete user-facing application has not been deployed. |
+
+## 16.1 Main Areas That Still Need Development
+
+### 1. Frontend Development
+
+A user-facing interface is still required to allow students to search for places, view details, filter results, manage favorites, read reviews and plan trips.
+
+### 2. Backend API Integration
+
+A backend application layer needs to be developed to connect the frontend with PostgreSQL and expose the existing database functionality through suitable APIs.
+
+### 3. User Authentication and Authorization
+
+Although database roles and permissions have been created, complete application-level authentication, session handling and enforcement of user-specific data ownership are still pending.
+
+The current database does not implement row-level security (RLS), so this ownership enforcement must be completed in the application layer before multi-user deployment.
+
+### 4. Real-World Map Data
+
+The current transport network contains a small hand-built map of 15 nodes and 32 directed edges. Its place names, distances and fares are estimates and need to be validated and expanded using reliable local data.
+
+### 5. Live Navigation and External Integrations
+
+The current route calculation works with stored node, edge, distance, time and fare information. Integration with external map providers, GPS, real-time traffic and live public transport information has not yet been implemented.
+
+### 6. End-to-End Testing and Deployment
+
+The database components have individual SQL and Python tests. Complete end-to-end testing of the future frontend, backend and database integration remains to be done.
+
+**Current development focus:** Completing the application layer, connecting it to the existing database, improving the accuracy and coverage of place and route data, and validating the complete user workflow.
+
+---
+
+# 17. Additional Documentation
+
+| Document | Description |
+|---|---|
+| `docs/er_diagram/tripgraph_er.png` | Original ER diagram. |
+| `docs/er_diagram/tripgraph_schema.png` | Relational schema diagram. |
+| `docs/er_diagram/xampp_designer_diagram.png` | phpMyAdmin Designer diagram. |
+| `docs/viva_demo.md` | Database demonstration and viva instructions. |
+| `docs/nosql_vs_sql.md` | SQL and NoSQL comparison. |
+| `data/CSV_CONTRACT.md` | CSV file format and data requirements. |
+| `normalization/README.md` | Normalization walkthrough. |
+| `transactions/README.md` | Concurrency and lost-update demonstrations. |
+| `recovery/README.md` | Transaction recovery demonstrations. |
+| `indexing/benchmarks/README.md` | Indexing benchmark instructions. |
+
+---
+
+# 18. Team
+
+Developed as a Database Management Systems project at **Netaji Subhas University of Technology (NSUT)**.
+
+| Name | Roll Number |
+|---|---|
+| Ayaan Chhabra | 2025UCM2333 |
+| Kanishk Goswami | 2025UCM2305 |
+| Anjali Kethan | 2025UCM2340 |
+| Suhani Malhotra | 2025UCM2359 |
+
+**Faculty Guide:** Mr. Anand Gupta
+
+---
+
+### TripGraph
+
+*Organizing places, connecting routes and making student exploration easier.*
+
+**Repository:** [github.com/ayaanchhabra/TripGraph](https://github.com/ayaanchhabra/TripGraph)
